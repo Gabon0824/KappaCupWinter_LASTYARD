@@ -4,7 +4,7 @@
 
 bool Game::Start()
 {
-	m_modelRender.Init("Assets/modelData/unityChan.tkm");
+	m_modelRender.Init("Assets/Chara_wepon/Human.tkm");
 	
 	return true;
 }

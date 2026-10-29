@@ -74,7 +74,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 ## アーキテクチャ
 
 - **ゲームオブジェクト**：すべて `IGameObject` を継承し、`NewGO<T>(優先度, "名前")` で生成、`DeleteGO` で削除する。エンジンが `Start()` → 毎フレーム `Update()` / `Render(RenderContext&)` を呼ぶ
-- **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game::Start()`（今はテスト用に `unityChan.tkm` を表示しているだけ）
+- **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game::Start()`（今は人型モデル `Assets/Chara_wepon/Human.tkm` を表示しているだけ）
 - プレイヤー・カメラ・敵・弾・UI などはまだない。作ったらここに書き足す
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
