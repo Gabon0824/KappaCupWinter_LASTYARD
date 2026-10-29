@@ -97,8 +97,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - リモートは GitHub の `Gabon0824/KappaCupWinter_LASTYARD`
 - コミットメッセージは日本語で「〇〇の実装」「〇〇の修正」「〇〇の追加」の形にする
 - コミットは頼まれたら行ってよい。`git push` は必ず事前にユーザーに確認する
-- `.vs/`・`x64/`・`*.user` などのビルド生成物や個人設定はコミットしない
-  - 今の `.gitignore` は `.vs` しか除外していない。`Game/Game/x64/` や `Game/Game.vcxproj.user` がすでにコミットされているので、整理するかはユーザーが決める
+- `.vs/`・`x64/`・`*.user` などのビルド生成物や個人設定はコミットしない（`.gitignore` で除外済み。以前コミットされていた分は 2026-10-29 に管理から外した）
 - `Docs/` を作ったら、Git に上げるのは自分で書いた仕様書・規約・ライセンス表（`GameSpec.md`・`CODING_RULE.md`・`ASSET_LICENSE.md`）だけにする。話題の記録（`TOPIC_LOG.md`・`topics/`・`ERROR_NOTES.md`）や学校配布の教材は `.gitignore` で除外する
 - コミット前に `git status` で、意図しないファイル（エンジン側の変更、一時ファイル）が含まれていないか確認する
 
