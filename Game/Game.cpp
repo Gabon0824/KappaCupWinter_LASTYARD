@@ -1,6 +1,20 @@
 #include "stdafx.h"
 #include "Game.h"
+#include "Map.h"
 
+
+
+
+
+Game::Game()
+{
+	map = NewGO<Map>(0);
+}
+
+Game::~Game()
+{
+	DeleteGO(map);
+}
 
 bool Game::Start()
 {
