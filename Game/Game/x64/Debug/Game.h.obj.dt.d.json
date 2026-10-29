@@ -1,0 +1,13 @@
+{
+    "Version": "1.2",
+    "Data": {
+        "Source": "f:\\my\\01_project\\02_game\\kappacupwinter_lastyard\\game\\game.h",
+        "ProvidedModule": "",
+        "Includes": [
+            "f:\\my\\01_project\\02_game\\kappacupwinter_lastyard\\k2engine\\level3drender\\levelrender.h",
+            "f:\\my\\01_project\\02_game\\kappacupwinter_lastyard\\k2enginelow\\level3d\\tklfile.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
