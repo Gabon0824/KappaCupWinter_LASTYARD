@@ -48,7 +48,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 
 ## 話題の記録
 
-- 話題は**1つの話題につき1ファイル**で `Docs/topics/` に記録する。目次は `Docs/TOPIC_LOG.md`（どちらもまだない。最初の話題を始めるときに作る）
+- 話題は**1つの話題につき1ファイル**で `Docs/topics/` に記録する。目次は `Docs/TOPIC_LOG.md`（2026-10-29 に作成。`.gitignore` で Git に上げないようにしてある）
 - 会話を始めたら、まず TOPIC_LOG.md の「今の話題」のファイルを読んで、進み具合と学習モードの段階を確認する
 - **ユーザーが `/next` と打ったら、今の話題を閉じて、新しい話題のファイルに切り替える**。新しい話題は、学習モードの段階を1回目から数える
 - **ユーザーが `/topics` と打ったら、保存してある話題の一覧を、それぞれ何の話か分かる形で出す**（読むだけで、ファイルは書き換えない）
@@ -121,6 +121,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - マテリアルは DirectX シェーダーマテリアルにし、`k2EngineShader.fx`（このリポジトリにはない。`01_FirstGame/tools/3dsMaxShader/` にある）を指定する
 - 人型モデル：`Game/Assets/Chara_wepon/Character_k2.max`（マテリアルを k2 用に置き換えたもの）→ `Human.tkm` / `Human.tks`。テクスチャは `Chara_wepon` につなぎ直してある（元の `Character.max` は古いフォルダ名 `Chara,wepon` のまま）
 - テクスチャは `.tkm` と同じフォルダの `.dds` から読まれる
+- デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）
 

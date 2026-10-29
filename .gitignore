@@ -74,3 +74,9 @@ Testing/
 .vs/
 x64/
 *.user
+
+# Docs は自分で書いた3つだけ Git に上げる（話題の記録は上げない）
+Docs/*
+!Docs/GameSpec.md
+!Docs/CODING_RULE.md
+!Docs/ASSET_LICENSE.md
