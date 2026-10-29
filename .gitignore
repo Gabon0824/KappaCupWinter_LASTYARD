@@ -69,3 +69,8 @@ Testing/
 
 
 .vs
+
+# Visual Studio のビルド生成物と個人設定
+.vs/
+x64/
+*.user
