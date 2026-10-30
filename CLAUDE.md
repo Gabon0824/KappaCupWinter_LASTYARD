@@ -120,7 +120,8 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - 学校の tk エクスポーター（MaxScript）は 3ds Max 2019 / 2020 にだけ入っている。`Character.max` は 3ds Max 2026 で保存されているので、2020 では開けない
 - マテリアルは DirectX シェーダーマテリアルにし、`k2EngineShader.fx`（このリポジトリにはない。`01_FirstGame/tools/3dsMaxShader/` にある）を指定する
 - 人型モデル：`Game/Assets/Chara_wepon/Character_k2.max`（マテリアルを k2 用に置き換えたもの）→ `Human.tkm` / `Human.tks`。テクスチャは `Chara_wepon` につなぎ直してある（元の `Character.max` は古いフォルダ名 `Chara,wepon` のまま）
-- テクスチャは `.tkm` と同じフォルダの `.dds` から読まれる
+- テクスチャは `.tkm` と同じフォルダの `.dds` から読まれる（`.tkm` に書かれた拡張子は `dds` に置き換えられる）
+- テクスチャは 2048x2048 以下・圧縮（BC1、透明ありは BC3）・ミップありにする。4096 の無圧縮だとメモリ不足で起動できなかった（開発 PC はメモリ 8GB、GTX 1650）。`Chara_wepon` の DDS は 2026-10-30 に PNG/JPG から作り直した。変換は `01_FirstGame/tools/3dsMaxScripts/texconv.exe` で `-w 2048 -h 2048 -m 0 -f BC1_UNORM`
 - デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）
