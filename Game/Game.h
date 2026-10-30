@@ -15,9 +15,10 @@ public:
 	void Render(RenderContext& rc);
 
 	Map* map;
+	Player* player;
 
 private:
-	ModelRender m_modelRender;
+	
 	Vector3 m_pos;
 };
 
