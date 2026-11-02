@@ -4,6 +4,7 @@
 
 class Player;
 class Map;
+class GameCamera;
 
 class Game : public IGameObject
 {
@@ -16,6 +17,7 @@ public:
 
 	Map* map;
 	Player* player;
+	GameCamera* gameCamera;
 
 private:
 	

@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "Map.h"
 #include "Player.h"
+#include "GameCamera.h"
 
 
 
@@ -11,12 +12,14 @@ Game::Game()
 {
 	map = NewGO<Map>(0);
 	player = NewGO<Player>(0, "player");
+	gameCamera = NewGO<GameCamera>(0, "gamecamera");
 }
 
 Game::~Game()
 {
 	DeleteGO(map);
 	DeleteGO(player);
+	DeleteGO(gameCamera);
 }
 
 bool Game::Start()
