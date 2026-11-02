@@ -46,7 +46,13 @@ void Player::Move()
 	//左スティックの入力量を加算する
 	moveSpeed += right + forward;
 
-	if (g_pad[0]->IsPress(enButtonB))
+	if (g_pad[0]->IsPress(enButtonLB2))
+	{
+		moveSpeed.x *= 0.7f;
+		moveSpeed.z *= 0.7f;
+	}
+
+	else if(g_pad[0]->IsPress(enButtonB))
 	{
 		moveSpeed.x *= 3.0f;
 		moveSpeed.z *= 3.0f;
@@ -69,7 +75,7 @@ void Player::Move()
 	else
 	{
 		//重力を発生させる
-		moveSpeed.y -= 2.5f;
+		moveSpeed.y -= 5.0f;
 
 	}
 	if(position.y <= -500.0f)
