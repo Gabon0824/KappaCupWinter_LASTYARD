@@ -50,7 +50,7 @@ namespace nsK2EngineLow {
 			{ enButtonLeft		, VK_NUMPAD4,	'4' 		},
 			{ enButtonRight		, VK_NUMPAD6,	'6' 		},
 			{ enButtonA			, 'J',			0xFFFFFFFF	},
-			{ enButtonB			, 'K',			0xFFFFFFFF	},
+			{ enButtonB			, VK_LSHIFT,			0xFFFFFFFF	},
 			{ enButtonY			, 'I',			0xFFFFFFFF	},
 			{ enButtonX			, 'L',			0xFFFFFFFF	},
 			{ enButtonSelect	, VK_SPACE,		0xFFFFFFFF	},
