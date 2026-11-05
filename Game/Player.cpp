@@ -96,11 +96,20 @@ void Player::Move()
 
 void Player::Rotation()
 {
-	if (fabsf(moveSpeed.x) >= 0.001f || fabsf(moveSpeed.z) >= 0.001f)
+	if (g_pad[0]->IsPress(enButtonLB2))
 	{
-		//移動方向を向く
-		rotation.SetRotationYFromDirectionXZ(moveSpeed);
+		Vector3 aimDir = g_camera3D->GetForward();
+		aimDir.y = 0.0f;
+		rotation.SetRotationYFromDirectionXZ(aimDir);
 		modelRender.SetRotation(rotation);
+	}
+	else
+	{
+		if (fabsf(moveSpeed.x) >= 0.001f || fabsf(moveSpeed.z) >= 0.001f)
+		{
+			rotation.SetRotationYFromDirectionXZ(moveSpeed);
+			modelRender.SetRotation(rotation);
+		}
 	}
 }
 

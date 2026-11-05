@@ -80,3 +80,7 @@ Docs/*
 !Docs/GameSpec.md
 !Docs/CODING_RULE.md
 !Docs/ASSET_LICENSE.md
+
+# アニメーションの元データ（1つ 22MB と大きいので上げない。ゲームでは .tka を使う）
+Game/Assets/Chara_wepon/Human_aim.max
+Game/Assets/Chara_wepon/Human_idle.max

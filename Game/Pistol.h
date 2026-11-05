@@ -12,4 +12,6 @@ public:
 	ModelRender modelRender;
 	Player* player = nullptr;
 	int handBoneId = -1;
+	float coolTime = 0.0f;
+
 };

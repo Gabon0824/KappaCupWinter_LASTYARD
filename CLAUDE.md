@@ -76,10 +76,12 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - **ゲームオブジェクト**：すべて `IGameObject` を継承し、`NewGO<T>(優先度, "名前")` で生成、`DeleteGO` で削除する。エンジンが `Start()` → 毎フレーム `Update()` / `Render(RenderContext&)` を呼ぶ
 - **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game` のコンストラクタが `Map` → `Player`（名前 `"player"`）→ `GameCamera`（`"gamecamera"`）の順に NewGO する。`GameCamera::Start()` が `FindGO<Player>("player")` するので、Player を先に作る
 - **Map**：デモマップ `Assets/stage/DemoMap.tkm` を表示する
-- **Player**：`Human.tkm` を表示し、`CharacterController` で移動する。移動の向きは `g_camera3D` の前方向・右方向で決める。B でダッシュ（×3）、A でジャンプ、LB2（LT）で構え中は移動が遅くなり、ダッシュできない
+- **Player**：`Human.tkm` を表示し、`CharacterController` で移動する。移動の向きは `g_camera3D` の前方向・右方向で決める。B でダッシュ（×3）、A でジャンプ、LB2（LT）で構え中は移動が遅くなり（×0.7）、ダッシュできず、体はカメラの前方向を向く（横歩き。止まっていてもカメラについてくる）。構えていないときは移動方向を向く。アニメーションは待機 / 構えの2つ
 - **GameCamera**：右肩越しの三人称カメラ（RE4 リメイクを参考）。右スティックで回す。LB2（LT）を押している間はエイム（近づいて、画角を狭くする）
 - **入力**：パッドがないときはキーボードが代わりになる（WASD＝左スティック、矢印＝右スティック、J＝A、左 Shift＝B、N＝LB2）。左 Shift はエンジンの `k2EngineLow/HID/GamePad.cpp` をユーザーが書き換えたもの（元は K）。パッドがつながっていると、キーボードは無視される
-- 敵・弾・UI などはまだない。作ったらここに書き足す
+- **Pistol**：`Pistol_Hand.tkm` を毎フレーム Player の骨 `hand_r` の位置・回転に合わせる。構え中（LB2）に RB2（RT、キーボードは 8）で1発ずつ撃つ（間隔 0.3 秒）。銃口から `Bullet` を NewGO し、マズルフラッシュ（エフェクト 2 番）と発射音（音 3 番）を出す。撃つ向きはカメラの前方向
+- **Bullet**：まっすぐ飛び、2 秒で DeleteGO される。まだ何にも当たらない
+- 敵・UI（レティクル、弾数など）はまだない。作ったらここに書き足す
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
 ## 仕様に関するルール
@@ -130,11 +132,17 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - ピストル：`Pistol_Leg`（右もものホルスターの中）を取り出して `Game/Assets/Chara_wepon/Pistol.max` → `Pistol.tkm`（2026-11-04、Claude が作成）。スキンなし。原点はグリップの中心、銃口はキャラの正面方向、グリップが下。銃口は原点から前へ約7.0・上へ約3.2。バッチ書き出しでは最適化（`mkTkm.bat`）が飛ばされるので、`tkmOptimizer.exe 入力 出力` を手で実行する
 - アニメーション：元の素材にアニメーションはない（`Assets/animData/` の idle / walk / run / jump.tka はエンジンのサンプルで unityChan 用。Human には使えない）。2026-11-04 に Claude が `Character_k2.max` の骨にスクリプトでキーを打って作った
   - `Assets/animData/human_aim.tka`（両手でピストルを構える）・`human_idle.tka`（腕を下ろして立つ）。どちらも 60 フレーム（30fps・2秒）のループで、0〜30 フレームで胸が少し動く（呼吸）
-  - 元データは `Chara_wepon/Human_aim.max` / `Human_idle.max`（`Character_k2.max` には書き込んでいない。0 フレームにポーズを打つと、tks を書き出し直したときにバインドポーズが変わってしまうため）
+  - 元データは `Chara_wepon/Human_aim.max` / `Human_idle.max`（1つ 22MB なので `.gitignore` で Git から外してあり、この PC にだけある。`Character_k2.max` には書き込んでいない。0 フレームにポーズを打つと、tks を書き出し直したときにバインドポーズが変わってしまうため）
   - 書き出しは学校の tkaExporter と同じ形式（ヘッダー：キー数・イベント数、キー：骨番号・時間・4x3 行列）。骨の順番は `Human.tks` と同じ 351 本
   - 構えのときのピストルの位置（Max の座標）：手首 `hand_r` から、指の付け根の向きに 2.2・手のひらの向きに 1.3 ずらした所がグリップの中心
   - 待機でも右手はピストルを握っている（銃口は斜め下・前）
 - 手に持たせる用のピストル：`Chara_wepon/Pistol_Hand.max` → `Pistol_Hand.tkm`（2026-11-05、Claude が作成）。頂点は右手の骨 `hand_r` から見た位置（骨の 0.39 倍の縮小は除いてある）。ゲームでは **`enModelUpAxisY` で Init** し（Z-up の補正をかけない）、毎フレーム `hand_r` の `Bone::CalcWorldTRS` で取った位置・回転をそのまま `SetPosition` / `SetRotation` する（拡大率は使わない）。理由：骨のワールド行列には、すでに Z-up の補正とプレイヤーの位置・回転が入っているため（`Skeleton::Update` と `Model::CalcWorldMatrix`）
+- 弾：`Game/Assets/bullet/Bullet.max` → `Bullet.tkm`、テクスチャ `Bullet_BaseColor.png` / `.DDS`（64x64 の真鍮色、BC1）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）。長さ 2.2・半径 0.25（約 5.5cm。見やすいように実物より大きい）。原点は弾の真ん中、先は Max の -Y ＝ ゲームの +Z（Z-up のまま普通に Init する）
+- 撃ったときのエフェクト：`Game/Assets/effect/MuzzleFlash.efk`（ゲームで読むもの）、`MuzzleFlash.efkefc`（Effekseer で開いて直す用）、`MuzzleFlash.efkproj`（Claude が手で書いた設定の XML）、`Texture/MuzzleFlash.png`・`Spark.png`（自作）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）
+  - 中身：真ん中で 4 フレーム光る「Flash」（加算、黄白→橙で消える、大きさ 6→11）と、前（+Z）に飛ぶ火花 8 個「Sparks」。全体 20 フレーム、ループなし
+  - Effekseer 1.60（`01_FirstGame/tools/Effekseer160Win/Tool/Effekseer.exe`）はコマンドで書き出せる：`Effekseer.exe -cui -in 入力(.efkproj か .efkefc) -e 出力.efk -o 保存.efkefc`。.efkefc の EDIT チャンクは zlib 圧縮の独自バイナリ XML（Claude が読み書きの方法を調べた）
+  - ゲームでは `EffectEngine::GetInstance()->ResistEffect(番号, u"Assets/effect/MuzzleFlash.efk")` で登録し、`NewGO<EffectEmitter>` → `Init(番号)` → 位置・回転 → `Play()`。再生が終わると自動で DeleteGO される
+- 撃った音：`Game/Assets/sound/PistolShot.wav`（ステレオ・16bit・44.1kHz・0.7 秒）。2026-11-05 に Claude が Python で合成（自作なのでライセンスの問題なし）。ゲームでは `g_soundEngine->ResistWaveFileBank(番号, "パス")` で登録し、`NewGO<SoundSource>` → `Init(番号)` → `Play(false)`。鳴り終わると自動で DeleteGO される
 - デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）
