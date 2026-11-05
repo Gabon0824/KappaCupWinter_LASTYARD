@@ -81,7 +81,8 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - **入力**：パッドがないときはキーボードが代わりになる（WASD＝左スティック、矢印＝右スティック、J＝A、左 Shift＝B、N＝LB2）。左 Shift はエンジンの `k2EngineLow/HID/GamePad.cpp` をユーザーが書き換えたもの（元は K）。パッドがつながっていると、キーボードは無視される
 - **Pistol**：`Pistol_Hand.tkm` を毎フレーム Player の骨 `hand_r` の位置・回転に合わせる。構え中（LB2）に RB2（RT、キーボードは 8）で1発ずつ撃つ（間隔 0.3 秒）。銃口から `Bullet` を NewGO し、マズルフラッシュ（エフェクト 2 番）と発射音（音 3 番）を出す。撃つ向きはカメラの前方向。弾は装填 10 発・予備 20 発（予備は仮）で、0 発になると自動でリロード（1.5 秒、予備から足りない分だけ込める）。X ボタン（キーボード L、仮）で、1 発でも減っていれば撃った分だけリロードできる
 - **Bullet**：まっすぐ飛び、2 秒で DeleteGO される。まだ何にも当たらない
-- 敵・UI（レティクル、弾数など）はまだない。作ったらここに書き足す
+- **Reticle**：`Reticle.dds` を `SpriteRender` で画面の真ん中に出す。LB2（LT）を押している間だけ Draw する。Game が NewGO（名前 `"reticle"`）。あとで弾数などの UI も作る予定
+- 敵・弾数などの UI はまだない。作ったらここに書き足す
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
 ## 仕様に関するルール
@@ -143,6 +144,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
   - Effekseer 1.60（`01_FirstGame/tools/Effekseer160Win/Tool/Effekseer.exe`）はコマンドで書き出せる：`Effekseer.exe -cui -in 入力(.efkproj か .efkefc) -e 出力.efk -o 保存.efkefc`。.efkefc の EDIT チャンクは zlib 圧縮の独自バイナリ XML（Claude が読み書きの方法を調べた）
   - ゲームでは `EffectEngine::GetInstance()->ResistEffect(番号, u"Assets/effect/MuzzleFlash.efk")` で登録し、`NewGO<EffectEmitter>` → `Init(番号)` → 位置・回転 → `Play()`。再生が終わると自動で DeleteGO される
 - 撃った音：`Game/Assets/sound/PistolShot.wav`（ステレオ・16bit・44.1kHz・0.7 秒）。2026-11-05 に Claude が Python で合成（自作なのでライセンスの問題なし）。ゲームでは `g_soundEngine->ResistWaveFileBank(番号, "パス")` で登録し、`NewGO<SoundSource>` → `Init(番号)` → `Play(false)`。鳴り終わると自動で DeleteGO される
+- レティクル：`Game/Assets/sprite/Reticle.png` / `Reticle.dds`（64x64、白い十字＋中央の点、薄い黒の縁取り、BC3・ミップあり）。2026-11-05 に Claude が Python で作成（自作なのでライセンスの問題なし）。作り直すときは PNG を直してから `texconv.exe -m 0 -f BC3_UNORM Reticle.png`（出力先の指定 `-o` に絶対パスを渡すと失敗するので、`sprite` フォルダで実行する）。ゲームでは `SpriteRender::Init("Assets/sprite/Reticle.dds", 64, 64)`
 - デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）

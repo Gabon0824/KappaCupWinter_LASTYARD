@@ -17,6 +17,7 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Reticle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -29,5 +30,6 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Reticle.h" />
   </ItemGroup>
 </Project>
