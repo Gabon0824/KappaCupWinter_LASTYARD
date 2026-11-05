@@ -74,8 +74,12 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 ## アーキテクチャ
 
 - **ゲームオブジェクト**：すべて `IGameObject` を継承し、`NewGO<T>(優先度, "名前")` で生成、`DeleteGO` で削除する。エンジンが `Start()` → 毎フレーム `Update()` / `Render(RenderContext&)` を呼ぶ
-- **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game::Start()`（今は人型モデル `Assets/Chara_wepon/Human.tkm` を表示しているだけ）
-- プレイヤー・カメラ・敵・弾・UI などはまだない。作ったらここに書き足す
+- **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game` のコンストラクタが `Map` → `Player`（名前 `"player"`）→ `GameCamera`（`"gamecamera"`）の順に NewGO する。`GameCamera::Start()` が `FindGO<Player>("player")` するので、Player を先に作る
+- **Map**：デモマップ `Assets/stage/DemoMap.tkm` を表示する
+- **Player**：`Human.tkm` を表示し、`CharacterController` で移動する。移動の向きは `g_camera3D` の前方向・右方向で決める。B でダッシュ（×3）、A でジャンプ、LB2（LT）で構え中は移動が遅くなり、ダッシュできない
+- **GameCamera**：右肩越しの三人称カメラ（RE4 リメイクを参考）。右スティックで回す。LB2（LT）を押している間はエイム（近づいて、画角を狭くする）
+- **入力**：パッドがないときはキーボードが代わりになる（WASD＝左スティック、矢印＝右スティック、J＝A、左 Shift＝B、N＝LB2）。左 Shift はエンジンの `k2EngineLow/HID/GamePad.cpp` をユーザーが書き換えたもの（元は K）。パッドがつながっていると、キーボードは無視される
+- 敵・弾・UI などはまだない。作ったらここに書き足す
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
 ## 仕様に関するルール
@@ -122,6 +126,15 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - 人型モデル：`Game/Assets/Chara_wepon/Character_k2.max`（マテリアルを k2 用に置き換えたもの）→ `Human.tkm` / `Human.tks`。テクスチャは `Chara_wepon` につなぎ直してある（元の `Character.max` は古いフォルダ名 `Chara,wepon` のまま）
 - テクスチャは `.tkm` と同じフォルダの `.dds` から読まれる（`.tkm` に書かれた拡張子は `dds` に置き換えられる）
 - テクスチャは 2048x2048 以下・圧縮（BC1、透明ありは BC3）・ミップありにする。4096 の無圧縮だとメモリ不足で起動できなかった（開発 PC はメモリ 8GB、GTX 1650）。`Chara_wepon` の DDS は 2026-10-30 に PNG/JPG から作り直した。変換は `01_FirstGame/tools/3dsMaxScripts/texconv.exe` で `-w 2048 -h 2048 -m 0 -f BC1_UNORM`
+- 2026-11-04 に、`Character_k2.max` から右ももの銃 `Pistol_Leg` を消して `Human.tkm` を書き出し直した（ホルスターは残っている）。元の `Character.max` には銃が残っている
+- ピストル：`Pistol_Leg`（右もものホルスターの中）を取り出して `Game/Assets/Chara_wepon/Pistol.max` → `Pistol.tkm`（2026-11-04、Claude が作成）。スキンなし。原点はグリップの中心、銃口はキャラの正面方向、グリップが下。銃口は原点から前へ約7.0・上へ約3.2。バッチ書き出しでは最適化（`mkTkm.bat`）が飛ばされるので、`tkmOptimizer.exe 入力 出力` を手で実行する
+- アニメーション：元の素材にアニメーションはない（`Assets/animData/` の idle / walk / run / jump.tka はエンジンのサンプルで unityChan 用。Human には使えない）。2026-11-04 に Claude が `Character_k2.max` の骨にスクリプトでキーを打って作った
+  - `Assets/animData/human_aim.tka`（両手でピストルを構える）・`human_idle.tka`（腕を下ろして立つ）。どちらも 60 フレーム（30fps・2秒）のループで、0〜30 フレームで胸が少し動く（呼吸）
+  - 元データは `Chara_wepon/Human_aim.max` / `Human_idle.max`（`Character_k2.max` には書き込んでいない。0 フレームにポーズを打つと、tks を書き出し直したときにバインドポーズが変わってしまうため）
+  - 書き出しは学校の tkaExporter と同じ形式（ヘッダー：キー数・イベント数、キー：骨番号・時間・4x3 行列）。骨の順番は `Human.tks` と同じ 351 本
+  - 構えのときのピストルの位置（Max の座標）：手首 `hand_r` から、指の付け根の向きに 2.2・手のひらの向きに 1.3 ずらした所がグリップの中心
+  - 待機でも右手はピストルを握っている（銃口は斜め下・前）
+- 手に持たせる用のピストル：`Chara_wepon/Pistol_Hand.max` → `Pistol_Hand.tkm`（2026-11-05、Claude が作成）。頂点は右手の骨 `hand_r` から見た位置（骨の 0.39 倍の縮小は除いてある）。ゲームでは **`enModelUpAxisY` で Init** し（Z-up の補正をかけない）、毎フレーム `hand_r` の `Bone::CalcWorldTRS` で取った位置・回転をそのまま `SetPosition` / `SetRotation` する（拡大率は使わない）。理由：骨のワールド行列には、すでに Z-up の補正とプレイヤーの位置・回転が入っているため（`Skeleton::Update` と `Model::CalcWorldMatrix`）
 - デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）
