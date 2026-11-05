@@ -9,6 +9,8 @@ Player::Player()
 	animationClips[enAnimationClip_Idle].SetLoopFlag(true);
 	animationClips[enAnimationClip_Aim].Load("Assets/AnimData/human_aim.tka");
 	animationClips[enAnimationClip_Aim].SetLoopFlag(true);
+	animationClips[enAnimationClip_AimWalk].Load("Assets/AnimData/human_walk.tka");
+	animationClips[enAnimationClip_AimWalk].SetLoopFlag(true);
 
 	modelRender.Init("Assets/Chara_wepon/Human.tkm", animationClips, enAnimationClip_Num);
 	characterController.Init(25.0f, 75.0f, position);
@@ -123,7 +125,15 @@ void Player::Animation()
 	//LT（キーボードは N）を押している間は構え、それ以外は待機
 	if (g_pad[0]->IsPress(enButtonLB2))
 	{
-		modelRender.PlayAnimation(enAnimationClip_Aim, 0.2f);
+		if (fabsf(moveSpeed.x) >= 0.001f || fabsf(moveSpeed.z) >= 0.001f)
+		{
+			modelRender.PlayAnimation(enAnimationClip_AimWalk, 0.2f);
+		}
+		else
+		{
+			modelRender.PlayAnimation(enAnimationClip_Aim, 0.2f);
+		}
+		
 	}
 	else
 	{

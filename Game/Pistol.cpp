@@ -15,6 +15,8 @@ namespace
 	//リロード時間
 	const float RELOAD_TIME = 1.5f;
 
+	const float REI = 100000.0f;
+
 
 }
 
@@ -74,9 +76,17 @@ void Pistol:: Update()
 	{
 		Vector3 muzzlePos = MUZZELE_OFFSET;
 		rot.Apply(muzzlePos);
-	    muzzlePos += pos;
+		muzzlePos += pos;
+		Vector3 StartTarget = g_camera3D->GetTarget();
+		Vector3 endTarget = StartTarget + g_camera3D->GetForward() * REI;
+		Vector3 pop;
+		if (PhysicsWorld::GetInstance()->RayTest(StartTarget, endTarget, pop) == false)
+		{
+			pop = endTarget;
+		}
+		Vector3 shotDir = pop - muzzlePos;
+		shotDir.Normalize();
 
-		Vector3 shotDir = g_camera3D->GetForward();
 		Quaternion shotRot;
 		shotRot.SetRotation(Vector3::AxisZ, shotDir);
 

@@ -37,6 +37,8 @@ void Bullet::Update()
 
 	modelRender.SetPosition(pos);
 	modelRender.SetRotation(rot);
+	Vector3 Size = { 5.0f,5.0f,5.0f };
+	modelRender.SetScale(Size);
 	modelRender.Update();
 
 	

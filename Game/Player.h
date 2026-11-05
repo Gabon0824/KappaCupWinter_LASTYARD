@@ -14,6 +14,7 @@ public:
  {
 	 enAnimationClip_Idle,
 	 enAnimationClip_Aim,
+	 enAnimationClip_AimWalk,
 	 enAnimationClip_Num,
  };
  AnimationClip animationClips[enAnimationClip_Num];

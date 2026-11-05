@@ -130,6 +130,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - テクスチャは `.tkm` と同じフォルダの `.dds` から読まれる（`.tkm` に書かれた拡張子は `dds` に置き換えられる）
 - テクスチャは 2048x2048 以下・圧縮（BC1、透明ありは BC3）・ミップありにする。4096 の無圧縮だとメモリ不足で起動できなかった（開発 PC はメモリ 8GB、GTX 1650）。`Chara_wepon` の DDS は 2026-10-30 に PNG/JPG から作り直した。変換は `01_FirstGame/tools/3dsMaxScripts/texconv.exe` で `-w 2048 -h 2048 -m 0 -f BC1_UNORM`
 - 2026-11-04 に、`Character_k2.max` から右ももの銃 `Pistol_Leg` を消して `Human.tkm` を書き出し直した（ホルスターは残っている）。元の `Character.max` には銃が残っている
+- FBX：`Game/Assets/Chara_wepon/Human.fbx`（2026-11-05、Claude が `Character_k2.max` から 3ds Max 2026 で書き出し）。ゲームでは使わない（ほかのツールに持っていく用）。スキンあり（メッシュ 12・骨 351 本）、アニメーションなし、Y-up、単位はインチのまま（身長 約 72）、FBX 2018、テクスチャは埋め込まず同じフォルダの PNG を参照する。未コミット
 - ピストル：`Pistol_Leg`（右もものホルスターの中）を取り出して `Game/Assets/Chara_wepon/Pistol.max` → `Pistol.tkm`（2026-11-04、Claude が作成）。スキンなし。原点はグリップの中心、銃口はキャラの正面方向、グリップが下。銃口は原点から前へ約7.0・上へ約3.2。バッチ書き出しでは最適化（`mkTkm.bat`）が飛ばされるので、`tkmOptimizer.exe 入力 出力` を手で実行する
 - アニメーション：元の素材にアニメーションはない（`Assets/animData/` の idle / walk / run / jump.tka はエンジンのサンプルで unityChan 用。Human には使えない）。2026-11-04 に Claude が `Character_k2.max` の骨にスクリプトでキーを打って作った
   - `Assets/animData/human_aim.tka`（両手でピストルを構える）・`human_idle.tka`（腕を下ろして立つ）。どちらも 60 フレーム（30fps・2秒）のループで、0〜30 フレームで胸が少し動く（呼吸）
@@ -137,6 +138,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
   - 書き出しは学校の tkaExporter と同じ形式（ヘッダー：キー数・イベント数、キー：骨番号・時間・4x3 行列）。骨の順番は `Human.tks` と同じ 351 本
   - 構えのときのピストルの位置（Max の座標）：手首 `hand_r` から、指の付け根の向きに 2.2・手のひらの向きに 1.3 ずらした所がグリップの中心
   - 待機でも右手はピストルを握っている（銃口は斜め下・前）
+  - `Assets/animData/human_walk.tka`（構えたまま歩く。24 フレーム＝0.8 秒のループ）：2026-11-05 にユーザーが Mixamo で作った `Chara_wepon/Pistol Walk.fbx`（骨は mixamorig の 65 本、スキンなし）を、Claude が Human の骨に写し替えた（リターゲット）。前に進む動きは取り除いてある（その場で足踏み）。右手の指は待機アニメの握った形、右手首は銃口が正面を向くように直してある。**Mixamo の利用規約は未確認（要確認）**。配布ページ（helpx.adobe.com の Mixamo FAQ）は自動では読めなかった。元の FBX をそのまま公開リポジトリに上げてよいかは分からないので、確認するまでコミットしない
 - 手に持たせる用のピストル：`Chara_wepon/Pistol_Hand.max` → `Pistol_Hand.tkm`（2026-11-05、Claude が作成）。頂点は右手の骨 `hand_r` から見た位置（骨の 0.39 倍の縮小は除いてある）。ゲームでは **`enModelUpAxisY` で Init** し（Z-up の補正をかけない）、毎フレーム `hand_r` の `Bone::CalcWorldTRS` で取った位置・回転をそのまま `SetPosition` / `SetRotation` する（拡大率は使わない）。理由：骨のワールド行列には、すでに Z-up の補正とプレイヤーの位置・回転が入っているため（`Skeleton::Update` と `Model::CalcWorldMatrix`）
 - 弾：`Game/Assets/bullet/Bullet.max` → `Bullet.tkm`、テクスチャ `Bullet_BaseColor.png` / `.DDS`（64x64 の真鍮色、BC1）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）。長さ 2.2・半径 0.25（約 5.5cm。見やすいように実物より大きい）。原点は弾の真ん中、先は Max の -Y ＝ ゲームの +Z（Z-up のまま普通に Init する）
 - 撃ったときのエフェクト：`Game/Assets/effect/MuzzleFlash.efk`（ゲームで読むもの）、`MuzzleFlash.efkefc`（Effekseer で開いて直す用）、`MuzzleFlash.efkproj`（Claude が手で書いた設定の XML）、`Texture/MuzzleFlash.png`・`Spark.png`（自作）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）
