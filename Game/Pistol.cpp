@@ -107,7 +107,12 @@ void Pistol:: Update()
 		}
 	}
 
-	
+	if (g_pad[0]->IsTrigger(enButtonX) && nowMagazine < MAGAZINE_SIZE && ammo > 0 && nowreload == false)
+	{
+		nowreload = true;
+		ReloadTime = RELOAD_TIME;
+	}
+
 	
 }
 
