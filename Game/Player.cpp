@@ -4,10 +4,14 @@
 
 Player::Player()
 {
-	modelRender.Init("Assets/Chara_wepon/Human.tkm");
 
+	animationClips[enAnimationClip_Idle].Load("Assets/animData/human_idle.tka");
+	animationClips[enAnimationClip_Idle].SetLoopFlag(true);
+	animationClips[enAnimationClip_Aim].Load("Assets/AnimData/human_aim.tka");
+	animationClips[enAnimationClip_Aim].SetLoopFlag(true);
+
+	modelRender.Init("Assets/Chara_wepon/Human.tkm", animationClips, enAnimationClip_Num);
 	characterController.Init(25.0f, 75.0f, position);
-
 }
 
 Player::~Player()
@@ -19,6 +23,7 @@ void Player::Update()
 {
 	Move();
 	Rotation();
+	Animation();
 	modelRender.Update();
 
 }
@@ -102,6 +107,19 @@ void Player::Rotation()
 void Player::Render(RenderContext& rc)
 {
 	modelRender.Draw(rc);
+}
+
+void Player::Animation()
+{
+	//LT（キーボードは N）を押している間は構え、それ以外は待機
+	if (g_pad[0]->IsPress(enButtonLB2))
+	{
+		modelRender.PlayAnimation(enAnimationClip_Aim, 0.2f);
+	}
+	else
+	{
+		modelRender.PlayAnimation(enAnimationClip_Idle, 0.2f);
+	}
 }
 
 

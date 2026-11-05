@@ -10,6 +10,14 @@ public:
  void Rotation();
  void Animation();
 
+ enum EnAnimationClip
+ {
+	 enAnimationClip_Idle,
+	 enAnimationClip_Aim,
+	 enAnimationClip_Num,
+ };
+ AnimationClip animationClips[enAnimationClip_Num];
+
  ModelRender modelRender;
  Vector3 position;
  CharacterController characterController;
