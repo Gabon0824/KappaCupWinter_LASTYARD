@@ -10,6 +10,12 @@ namespace
 	const float BULLET_SPEED = 3000.0f;
 
 	const Vector3 MUZZELE_OFFSET = { -7.13f,0.93f,5.9f };
+	//最大弾数
+	const int MAGAZINE_SIZE = 10;
+	//リロード時間
+	const float RELOAD_TIME = 1.5f;
+
+
 }
 
 
@@ -51,7 +57,20 @@ void Pistol:: Update()
 
 	coolTime -= g_gameTime->GetFrameDeltaTime();
 
-	if (coolTime <= 0.0f && g_pad[0]->IsPress(enButtonLB2) && g_pad[0]->IsTrigger(enButtonRB2))
+	if (nowreload == true)
+	{
+		ReloadTime -= g_gameTime->GetFrameDeltaTime();
+		if (ReloadTime <= 0.0f)
+		{
+			int need = MAGAZINE_SIZE - nowMagazine;
+			if (need > ammo) { need = ammo; }
+			nowMagazine += need;
+			ammo -= need;
+			nowreload = false;
+		}
+	}
+
+	if (coolTime <= 0.0f && g_pad[0]->IsPress(enButtonLB2) && g_pad[0]->IsTrigger(enButtonRB2) && nowMagazine > 0 && nowreload == false)
 	{
 		Vector3 muzzlePos = MUZZELE_OFFSET;
 		rot.Apply(muzzlePos);
@@ -79,7 +98,16 @@ void Pistol:: Update()
 		
 		//次撃てるまでの時間をリセット
 		coolTime = SHOT_INTERVAL;
+
+		nowMagazine--;
+		if (nowMagazine == 0)
+		{
+			nowreload = true;
+			ReloadTime = RELOAD_TIME;
+		}
 	}
+
+	
 	
 }
 
