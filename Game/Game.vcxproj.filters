@@ -15,6 +15,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="Pistol.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -25,5 +26,6 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="Pistol.h" />
   </ItemGroup>
 </Project>
