@@ -11,6 +11,8 @@ Player::Player()
 	animationClips[enAnimationClip_Aim].SetLoopFlag(true);
 	animationClips[enAnimationClip_AimWalk].Load("Assets/AnimData/human_walk.tka");
 	animationClips[enAnimationClip_AimWalk].SetLoopFlag(true);
+	animationClips[enAnimationClip_Walk].Load("Assets/AnimData/human_walk_normal.tka");
+	animationClips[enAnimationClip_Walk].SetLoopFlag(true);
 
 	modelRender.Init("Assets/Chara_wepon/Human.tkm", animationClips, enAnimationClip_Num);
 	characterController.Init(25.0f, 75.0f, position);
@@ -137,7 +139,14 @@ void Player::Animation()
 	}
 	else
 	{
-		modelRender.PlayAnimation(enAnimationClip_Idle, 0.2f);
+		if (fabsf(moveSpeed.x) >= 0.001f || fabsf(moveSpeed.z) >= 0.001f)
+		{
+			modelRender.PlayAnimation(enAnimationClip_Walk, 0.2f);
+		}
+		else
+		{
+			modelRender.PlayAnimation(enAnimationClip_Idle, 0.2f);
+		}
 	}
 }
 

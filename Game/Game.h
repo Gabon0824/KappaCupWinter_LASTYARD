@@ -7,6 +7,7 @@ class Map;
 class GameCamera;
 class Pistol;
 class Reticle;
+class UI;
 
 class Game : public IGameObject
 {
@@ -22,6 +23,7 @@ public:
 	GameCamera* gameCamera;
 	Pistol* pistol;
 	Reticle* reticle;
+	UI* ui;
 
 private:
 	

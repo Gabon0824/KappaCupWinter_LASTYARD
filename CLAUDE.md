@@ -8,7 +8,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 開発者は、河原電子ビジネス専門学校ゲームクリエイター科の学生。
 ゲーム側のコードは `Game/` にある（`Game.sln` も同じフォルダ）。`k2Engine/`・`k2EngineLow/`・`exlib/` はエンジンと配布ライブラリなので、頼まれない限り編集しない。
 
-ゲームの仕様は、企画書（`04_伊藤颯希_企画書_LASTYARD.pdf`）が元になっている。要点は下の「ゲームの仕様（企画書から）」にまとめてある。
+ゲームの仕様は、企画書（`04_伊藤颯希_企画書_LASTYARD.pdf`。この PC では元の `F:\My\ゲーム企画書.pptx` が読める。3 枚目がゲーム画面と UI の絵）が元になっている。要点は下の「ゲームの仕様（企画書から）」にまとめてある。
 仕様書 `Docs/GameSpec.md` はまだない。作ったら、機能を作る前に読み、仕様が変わったら一緒に更新する。
 
 ## ゲームの仕様（企画書から）
@@ -76,13 +76,14 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - **ゲームオブジェクト**：すべて `IGameObject` を継承し、`NewGO<T>(優先度, "名前")` で生成、`DeleteGO` で削除する。エンジンが `Start()` → 毎フレーム `Update()` / `Render(RenderContext&)` を呼ぶ
 - **起動の流れ**：`main.cpp` が `NewGO<Game>` を呼ぶ → `Game` のコンストラクタが `Map` → `Player`（名前 `"player"`）→ `GameCamera`（`"gamecamera"`）の順に NewGO する。`GameCamera::Start()` が `FindGO<Player>("player")` するので、Player を先に作る
 - **Map**：デモマップ `Assets/stage/DemoMap.tkm` を表示する
-- **Player**：`Human.tkm` を表示し、`CharacterController` で移動する。移動の向きは `g_camera3D` の前方向・右方向で決める。B でダッシュ（×3）、A でジャンプ、LB2（LT）で構え中は移動が遅くなり（×0.7）、ダッシュできず、体はカメラの前方向を向く（横歩き。止まっていてもカメラについてくる）。構えていないときは移動方向を向く。アニメーションは待機 / 構えの2つ
+- **Player**：`Human.tkm` を表示し、`CharacterController` で移動する。移動の向きは `g_camera3D` の前方向・右方向で決める。B でダッシュ（×3）、A でジャンプ、LB2（LT）で構え中は移動が遅くなり（×0.7）、ダッシュできず、体はカメラの前方向を向く（横歩き。止まっていてもカメラについてくる）。構えていないときは移動方向を向く。アニメーションは待機 / 歩き / 構え / 構え歩きの4つ（動いているかと LB2 で切り替える）
 - **GameCamera**：右肩越しの三人称カメラ（RE4 リメイクを参考）。右スティックで回す。LB2（LT）を押している間はエイム（近づいて、画角を狭くする）
 - **入力**：パッドがないときはキーボードが代わりになる（WASD＝左スティック、矢印＝右スティック、J＝A、左 Shift＝B、N＝LB2）。左 Shift はエンジンの `k2EngineLow/HID/GamePad.cpp` をユーザーが書き換えたもの（元は K）。パッドがつながっていると、キーボードは無視される
-- **Pistol**：`Pistol_Hand.tkm` を毎フレーム Player の骨 `hand_r` の位置・回転に合わせる。構え中（LB2）に RB2（RT、キーボードは 8）で1発ずつ撃つ（間隔 0.3 秒）。銃口から `Bullet` を NewGO し、マズルフラッシュ（エフェクト 2 番）と発射音（音 3 番）を出す。撃つ向きはカメラの前方向。弾は装填 10 発・予備 20 発（予備は仮）で、0 発になると自動でリロード（1.5 秒、予備から足りない分だけ込める）。X ボタン（キーボード L、仮）で、1 発でも減っていれば撃った分だけリロードできる
+- **Pistol**：`Pistol_Hand.tkm` を毎フレーム Player の骨 `hand_r` の位置・回転に合わせる。構え中（LB2）に RB2（RT、キーボードは 8）で1発ずつ撃つ（間隔 0.3 秒）。銃口から `Bullet` を NewGO し、マズルフラッシュ（エフェクト 2 番）と発射音（音 3 番）を出す。撃つ向きは、カメラの注視点から前方向へ飛ばしたレイが当たった所（`PhysicsWorld::RayTest`）へ向かう向きで、レティクルの先に飛ぶ。弾は装填 10 発・予備 20 発（予備は仮）で、0 発になると自動でリロード（1.5 秒、予備から足りない分だけ込める）。X ボタン（キーボード L、仮）で、1 発でも減っていれば撃った分だけリロードできる
 - **Bullet**：まっすぐ飛び、2 秒で DeleteGO される。まだ何にも当たらない
-- **Reticle**：`Reticle.dds` を `SpriteRender` で画面の真ん中に出す。LB2（LT）を押している間だけ Draw する。Game が NewGO（名前 `"reticle"`）。あとで弾数などの UI も作る予定
-- 敵・弾数などの UI はまだない。作ったらここに書き足す
+- **Reticle**：`Reticle.dds` を `SpriteRender` で画面の真ん中に出す。LB2（LT）を押している間だけ Draw する。Game が NewGO（名前 `"reticle"`）
+- **UI**：HP バーの枠・中身・区切り線、銃と救急キットのパネルを `SpriteRender` で出す。弾数は `FontRender` で、`Start` で `FindGO<Pistol>("pistol")` して `nowMagazine` / `ammo` を毎フレーム文字にする。Game が NewGO（名前 `"ui"`）。HP はまだコードになく、バーは満タンのまま。救急キットの数はまだ出していない
+- 敵はまだない。作ったらここに書き足す
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
 ## 仕様に関するルール
@@ -138,7 +139,8 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
   - 書き出しは学校の tkaExporter と同じ形式（ヘッダー：キー数・イベント数、キー：骨番号・時間・4x3 行列）。骨の順番は `Human.tks` と同じ 351 本
   - 構えのときのピストルの位置（Max の座標）：手首 `hand_r` から、指の付け根の向きに 2.2・手のひらの向きに 1.3 ずらした所がグリップの中心
   - 待機でも右手はピストルを握っている（銃口は斜め下・前）
-  - `Assets/animData/human_walk.tka`（構えたまま歩く。18 フレーム＝0.6 秒のループ、その場で足踏み）：2026-11-05 に Claude が一から作成（Mixamo のデータは使っていない。自作なのでライセンスの問題なし）。上半身は `Human_aim.max` の構え（0 フレーム）のまま、下半身はスクリプトで計算（足の運び・腰の上下と左右・ひねり、ひざは 2 本の骨の IK）。歩幅 24（足が地面にある間に後ろへ動く距離）・1 周 0.6 秒で、構え中の移動の速さ 84/秒にほぼ合わせてある。最初は Mixamo の `Pistol Walk.fbx` を写し替えたものだったが、Mixamo の規約（元ファイルを抜き出せる形で配るのは禁止）を考えて作り直した
+  - `Assets/animData/human_walk.tka`（構えたまま歩く。18 フレーム＝0.6 秒のループ、その場で足踏み）：2026-11-05 に Claude が一から作成（Mixamo のデータは使っていない。自作なのでライセンスの問題なし）。上半身は歩き専用に作った構え（2026-11-06。手は肩の高さ、前傾 9°、右肩を 12° 引く。`human_aim.tka` の構えとは別で、そちらより手が高い）で、歩くと肩が腰と逆に少しゆれる。下半身はスクリプトで計算（足の運び・腰の上下と左右・ひねり、ひざは 2 本の骨の IK）。歩幅 24（足が地面にある間に後ろへ動く距離）・1 周 0.6 秒で、構え中の移動の速さ 84/秒にほぼ合わせてある。最初は Mixamo の `Pistol Walk.fbx` を写し替えたものだったが、Mixamo の規約（元ファイルを抜き出せる形で配るのは禁止）を考えて作り直した
+  - `Assets/animData/human_walk_normal.tka`（エイムしていないときの歩き。20 フレーム＝約 0.67 秒のループ、その場で足踏み）：2026-11-06 に Claude が一から作成（自作なのでライセンスの問題なし）。Mixamo の `Chara_wepon/Walking.fbx` は全体の動きを見ただけで、値は使っていない（`Walking.fbx` は Git に上げない）。腕は足と逆に振り、銃を持つ右腕は左腕より振りを小さくしてある。2026-11-06 にゆっくりに作り直した。歩幅 36 で約 108/秒に合う（通常の移動は 120/秒、ダッシュは 360/秒）
 - 手に持たせる用のピストル：`Chara_wepon/Pistol_Hand.max` → `Pistol_Hand.tkm`（2026-11-05、Claude が作成）。頂点は右手の骨 `hand_r` から見た位置（骨の 0.39 倍の縮小は除いてある）。ゲームでは **`enModelUpAxisY` で Init** し（Z-up の補正をかけない）、毎フレーム `hand_r` の `Bone::CalcWorldTRS` で取った位置・回転をそのまま `SetPosition` / `SetRotation` する（拡大率は使わない）。理由：骨のワールド行列には、すでに Z-up の補正とプレイヤーの位置・回転が入っているため（`Skeleton::Update` と `Model::CalcWorldMatrix`）
 - 弾：`Game/Assets/bullet/Bullet.max` → `Bullet.tkm`、テクスチャ `Bullet_BaseColor.png` / `.DDS`（64x64 の真鍮色、BC1）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）。長さ 2.2・半径 0.25（約 5.5cm。見やすいように実物より大きい）。原点は弾の真ん中、先は Max の -Y ＝ ゲームの +Z（Z-up のまま普通に Init する）
 - 撃ったときのエフェクト：`Game/Assets/effect/MuzzleFlash.efk`（ゲームで読むもの）、`MuzzleFlash.efkefc`（Effekseer で開いて直す用）、`MuzzleFlash.efkproj`（Claude が手で書いた設定の XML）、`Texture/MuzzleFlash.png`・`Spark.png`（自作）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）
@@ -147,6 +149,7 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
   - ゲームでは `EffectEngine::GetInstance()->ResistEffect(番号, u"Assets/effect/MuzzleFlash.efk")` で登録し、`NewGO<EffectEmitter>` → `Init(番号)` → 位置・回転 → `Play()`。再生が終わると自動で DeleteGO される
 - 撃った音：`Game/Assets/sound/PistolShot.wav`（ステレオ・16bit・44.1kHz・0.7 秒）。2026-11-05 に Claude が Python で合成（自作なのでライセンスの問題なし）。ゲームでは `g_soundEngine->ResistWaveFileBank(番号, "パス")` で登録し、`NewGO<SoundSource>` → `Init(番号)` → `Play(false)`。鳴り終わると自動で DeleteGO される
 - レティクル：`Game/Assets/sprite/Reticle.png` / `Reticle.dds`（64x64、白い十字＋中央の点、薄い黒の縁取り、BC3・ミップあり）。2026-11-05 に Claude が Python で作成（自作なのでライセンスの問題なし）。作り直すときは PNG を直してから `texconv.exe -m 0 -f BC3_UNORM Reticle.png`（出力先の指定 `-o` に絶対パスを渡すと失敗するので、`sprite` フォルダで実行する）。ゲームでは `SpriteRender::Init("Assets/sprite/Reticle.dds", 64, 64)`
+- HUD の絵：`Game/Assets/sprite/UI_HealthFrame`（表示 384x48）・`UI_HealthBar`（無地。表示 332x20、左端を支点に横へ縮める）・`UI_HealthTicks`（区切り。表示 332x20）・`UI_WeaponPanel`（表示 220x110）・`UI_MedkitPanel`（表示 165x110）の `.png` / `.DDS`（BC3・ミップあり）。2026-11-06 に Claude が企画書の絵を見本に Python で一から描いた（自作なのでライセンスの問題なし。文字も線で描いたのでフォントは使っていない）。数字は絵に入っていないので `FontRender` で出す
 - デモマップ（移動・攻撃の確認用）：`Game/Assets/stage/DemoMap.max` → `DemoMap.tkm`（Claude が作成。テクスチャ `Demo*.png` / `.DDS` も自作なのでライセンスの問題なし）。1m = 40単位、40m 四方、flat shading で書き出し
 
 ## タスク管理（Notion など）

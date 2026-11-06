@@ -5,7 +5,7 @@
 #include "GameCamera.h"
 #include "Pistol.h"
 #include "Reticle.h"
-
+#include "UI.h"
 
 
 
@@ -17,6 +17,7 @@ Game::Game()
 	gameCamera = NewGO<GameCamera>(0, "gamecamera");
 	pistol = NewGO<Pistol>(0, "pistol");
 	reticle = NewGO<Reticle>(0, "reticle");
+	ui = NewGO<UI>(0, "ui");
 }
 
 Game::~Game()
@@ -26,6 +27,7 @@ Game::~Game()
 	DeleteGO(gameCamera);
 	DeleteGO(pistol);
 	DeleteGO(reticle);
+	DeleteGO(ui);
 }
 
 bool Game::Start()
