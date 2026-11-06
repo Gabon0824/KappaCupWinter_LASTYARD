@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "UI.h"
 #include "Pistol.h"
+#include "Player.h"
 UI::UI()
 {
 	healthFrame.Init("Assets/sprite/UI_HealthFrame.DDS", 384, 48);
@@ -26,10 +27,17 @@ UI::~UI()
 bool UI::Start()
 {
 	pistol = FindGO<Pistol>("pistol");
+	player = FindGO<Player>("player");
 	return true;
 }
 void UI::Update()
 {
+	//今のHPの割合を知って減らす仕組み
+	float hpRate = (float)player->hp / player->MAX_HP;
+	healthBar.SetScale(Vector3(hpRate, 1.0f, 1.0f));
+	healthFrame.Update();
+	healthBar.Update();
+
 
 	healthFrame.Update();
 	healthBar.Update();

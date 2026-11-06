@@ -1,6 +1,7 @@
 #pragma once
 
 class Pistol;
+class Player;
 class UI : public IGameObject
 {
 public:
@@ -21,6 +22,7 @@ public:
 	FontRender medkitText;
 
 	Pistol* pistol = nullptr;
+	Player* player = nullptr;
 
 
 };

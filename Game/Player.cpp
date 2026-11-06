@@ -30,6 +30,18 @@ void Player::Update()
 	Animation();
 	modelRender.Update();
 
+
+	//HPバーが減るボタン（実装時には消しておくこと！)
+	if (g_pad[0]->IsTrigger(enButtonY))
+	{
+		hp -= 10;
+		if (hp < 0)
+		{
+			hp = 0;
+		}
+	}
+	Move();
+
 }
 
 void Player::Move()

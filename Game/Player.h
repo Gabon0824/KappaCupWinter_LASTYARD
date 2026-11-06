@@ -26,6 +26,8 @@ public:
  Vector3 moveSpeed;
  Quaternion rotation;
  float defaultSpeed = 1.0f;
+ const int MAX_HP = 100;
+ int hp = MAX_HP;
 
 };
 
