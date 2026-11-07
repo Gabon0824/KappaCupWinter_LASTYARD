@@ -19,6 +19,7 @@
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Enemy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -33,5 +34,6 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="Enemy.h" />
   </ItemGroup>
 </Project>

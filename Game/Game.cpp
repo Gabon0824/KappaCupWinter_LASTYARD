@@ -6,6 +6,7 @@
 #include "Pistol.h"
 #include "Reticle.h"
 #include "UI.h"
+#include "Enemy.h"
 
 
 
@@ -18,6 +19,7 @@ Game::Game()
 	pistol = NewGO<Pistol>(0, "pistol");
 	reticle = NewGO<Reticle>(0, "reticle");
 	ui = NewGO<UI>(0, "ui");
+	NewGO<Enemy>(0, "enemy");
 }
 
 Game::~Game()

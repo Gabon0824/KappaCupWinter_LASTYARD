@@ -1,11 +1,13 @@
 #include "stdafx.h"
 #include "Bullet.h"
-
-
+#include "Enemy.h"
 
 namespace
 {
 	const float  BULLET_LIFE_TIME = 2.0f;
+	const int BULLET_DAMAGE = 10;
+	const float HIT_DISTANCE = 40.0f;
+
 }
 Bullet::Bullet()
 {
@@ -28,6 +30,19 @@ void Bullet::Update()
 		DeleteGO(this);
 		return;
 	}
+	Enemy* enemy = FindGO<Enemy>("enemy");
+	if (enemy != nullptr)
+	{
+		Vector3 enemyCenter = enemy->position;
+		enemyCenter.y += 60.0f;
+		Vector3 diff = enemyCenter - pos;
+		if (diff.Length() < HIT_DISTANCE)
+		{
+			enemy->hp -= BULLET_DAMAGE;
+			DeleteGO(this);
+			return;
+		}
+	}
 
 
 	Vector3 dir = moveSpeed;
@@ -37,8 +52,9 @@ void Bullet::Update()
 
 	modelRender.SetPosition(pos);
 	modelRender.SetRotation(rot);
-	/*Vector3 Size = { 5.0f,5.0f,5.0f };
-	//modelRender.SetScale(Size);*/
+	//弾のサイズ
+	Vector3 Size = { 10.0f,10.0f,10.0f };
+	modelRender.SetScale(Size);
 	modelRender.Update();
 
 	

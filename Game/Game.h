@@ -8,6 +8,7 @@ class GameCamera;
 class Pistol;
 class Reticle;
 class UI;
+class Enemy;
 
 class Game : public IGameObject
 {

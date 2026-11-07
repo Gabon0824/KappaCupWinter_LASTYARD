@@ -80,10 +80,10 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
 - **GameCamera**：右肩越しの三人称カメラ（RE4 リメイクを参考）。右スティックで回す。LB2（LT）を押している間はエイム（近づいて、画角を狭くする）
 - **入力**：パッドがないときはキーボードが代わりになる（WASD＝左スティック、矢印＝右スティック、J＝A、左 Shift＝B、N＝LB2）。左 Shift はエンジンの `k2EngineLow/HID/GamePad.cpp` をユーザーが書き換えたもの（元は K）。パッドがつながっていると、キーボードは無視される
 - **Pistol**：`Pistol_Hand.tkm` を毎フレーム Player の骨 `hand_r` の位置・回転に合わせる。構え中（LB2）に RB2（RT、キーボードは 8）で1発ずつ撃つ（間隔 0.3 秒）。銃口から `Bullet` を NewGO し、マズルフラッシュ（エフェクト 2 番）と発射音（音 3 番）を出す。撃つ向きは、カメラの注視点から前方向へ飛ばしたレイが当たった所（`PhysicsWorld::RayTest`）へ向かう向きで、レティクルの先に飛ぶ。弾は装填 10 発・予備 20 発（予備は仮）で、0 発になると自動でリロード（1.5 秒、予備から足りない分だけ込める）。X ボタン（キーボードは L）で、1 発でも減っていれば撃った分だけリロードできる
-- **Bullet**：まっすぐ飛び、2 秒で DeleteGO される。まだ何にも当たらない
+- **Bullet**：まっすぐ飛び、2 秒で DeleteGO される。毎フレーム `FindGO<Enemy>("enemy")` し、敵の体の真ん中（足元の y + 60）との距離が 40 より短ければ、敵の HP を 10（仮）減らして消える。壁には当たらない
 - **Reticle**：`Reticle.dds` を `SpriteRender` で画面の真ん中に出す。LB2（LT）を押している間だけ Draw する。Game が NewGO（名前 `"reticle"`）
-- **UI**：HP バーの枠・中身・区切り線、銃と救急キットのパネルを `SpriteRender` で出す。弾数は `FontRender` で、`Start` で `FindGO<Pistol>("pistol")` して `nowMagazine` / `ammo` を毎フレーム文字にする。Game が NewGO（名前 `"ui"`）。`Player` の `hp` / `MAX_HP`（100、仮）を読み、割合を `healthBar` の `SetScale` の x にする。今は Y ボタン（キーボード I）で 10 減る（確認用。敵を作ったら消す）。救急キットの数はまだ出していない
-- 敵はまだない。作ったらここに書き足す
+- **UI**：HP バーの枠・中身・区切り線、銃と救急キットのパネルを `SpriteRender` で出す。弾数は `FontRender` で、`Start` で `FindGO<Pistol>("pistol")` して `nowMagazine` / `ammo` を毎フレーム文字にする。Game が NewGO（名前 `"ui"`）。`Player` の `hp` / `MAX_HP`（100、仮）を読み、割合を `healthBar` の `SetScale` の x にする。今は Y ボタン（キーボード I）でも 10 減る（確認用。`Player.cpp` にまだ残っているので消す）。救急キットの数はまだ出していない
+- **Enemy**：仮のゾンビ（`Assets/enemy/Zombie.tkm`、歩き `human_zombie_walk.tka`）。`Start` で `FindGO<Player>("player")` し、毎フレーム プレイヤーへ向かって `CharacterController` で歩く（速さ 60、仮）。進む方向を向く。Game が NewGO（名前 `"enemy"`、1 体だけ）。HP 30（仮）で、0 以下になると自分を DeleteGO する（Game はポインタを持たない）。プレイヤーとの距離が 70（仮）以内になると止まって攻撃のアニメーションを再生し、1.5 秒（仮）ごとにプレイヤーの HP を減らす（攻撃力は仮）。プレイヤーの HP が 0 になっても今は何も起きない（失敗の画面はあとで作る）
 - 共通ヘッダは `stdafx.h`（`nsK2EngineLow` / `nsK2Engine` を using している）。各 `.cpp` の先頭で必ず `#include "stdafx.h"` する
 
 ## 仕様に関するルール
@@ -142,6 +142,9 @@ k2Engine（DirectX12 ベースの学習用エンジン）で作っている 3D �
   - 待機でも右手はピストルを握っている（銃口は斜め下・前）
   - `Assets/animData/human_walk.tka`（構えたまま歩く。18 フレーム＝0.6 秒のループ、その場で足踏み）：2026-11-05 に Claude が一から作成（Mixamo のデータは使っていない。自作なのでライセンスの問題なし）。上半身は歩き専用に作った構え（2026-11-06。手は肩の高さ、前傾 9°、右肩を 12° 引く。`human_aim.tka` の構えとは別で、そちらより手が高い）で、歩くと肩が腰と逆に少しゆれる。下半身はスクリプトで計算（足の運び・腰の上下と左右・ひねり、ひざは 2 本の骨の IK）。歩幅 24（足が地面にある間に後ろへ動く距離）・1 周 0.6 秒で、構え中の移動の速さ 84/秒にほぼ合わせてある。最初は Mixamo の `Pistol Walk.fbx` を写し替えたものだったが、Mixamo の規約（元ファイルを抜き出せる形で配るのは禁止）を考えて作り直した
   - `Assets/animData/human_walk_normal.tka`（エイムしていないときの歩き。20 フレーム＝約 0.67 秒のループ、その場で足踏み）：2026-11-06 に Claude が一から作成（自作なのでライセンスの問題なし）。Mixamo の `Chara_wepon/Walking.fbx` は全体の動きを見ただけで、値は使っていない（`Walking.fbx` は Git に上げない）。腕は足と逆に振り、銃を持つ右腕は左腕より振りを小さくしてある。2026-11-06 にゆっくりに作り直した。歩幅 36 で約 108/秒に合う（通常の移動は 120/秒、ダッシュは 360/秒）
+  - `Assets/animData/human_zombie_walk.tka`（仮の敵用。両手を前に出してよろよろ歩く。24 フレーム＝0.8 秒のループ、その場で足踏み）：2026-11-07 に Claude が一から作成（自作なのでライセンスの問題なし）。歩幅 24 で、敵の仮の速さ 60/秒に合う。骨は `Human.tks` と同じなので `Human.tkm` で再生する
+  - `Assets/animData/human_zombie_attack.tka`（仮の敵の攻撃。腕を振り上げて振り下ろす。46 フレーム＝ちょうど 1.5 秒のループ）：2026-11-07 に Claude が一から作成（自作なのでライセンスの問題なし）。0 フレーム＝手が当たる瞬間で、攻撃の間隔 1.5 秒に合わせてある
+- 仮の敵のモデル：`Game/Assets/enemy/Zombie.tkm` / `Zombie.tks`（2026-11-07、Claude が作成。形と骨は `Human.tkm` / `.tks` のコピーで、同じアニメーションが使える）。同じフォルダの `T_*.DDS` / `M_*.DDS` は `Chara_wepon` の元の PNG / JPG を縮小（1024 か 512、BC1。まつ毛だけ BC3）して、肌を青緑に、服を汚れた色にして血の染みを足したもの。元のキャラクター素材を改変したものなので、改変と再配布の条件は要確認。帽子やホルスターは形が残っている
 - 手に持たせる用のピストル：`Chara_wepon/Pistol_Hand.max` → `Pistol_Hand.tkm`（2026-11-05、Claude が作成）。頂点は右手の骨 `hand_r` から見た位置（骨の 0.39 倍の縮小は除いてある）。ゲームでは **`enModelUpAxisY` で Init** し（Z-up の補正をかけない）、毎フレーム `hand_r` の `Bone::CalcWorldTRS` で取った位置・回転をそのまま `SetPosition` / `SetRotation` する（拡大率は使わない）。理由：骨のワールド行列には、すでに Z-up の補正とプレイヤーの位置・回転が入っているため（`Skeleton::Update` と `Model::CalcWorldMatrix`）
 - 弾：`Game/Assets/bullet/Bullet.max` → `Bullet.tkm`、テクスチャ `Bullet_BaseColor.png` / `.DDS`（64x64 の真鍮色、BC1）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）。長さ 2.2・半径 0.25（約 5.5cm。見やすいように実物より大きい）。原点は弾の真ん中、先は Max の -Y ＝ ゲームの +Z（Z-up のまま普通に Init する）
 - 撃ったときのエフェクト：`Game/Assets/effect/MuzzleFlash.efk`（ゲームで読むもの）、`MuzzleFlash.efkefc`（Effekseer で開いて直す用）、`MuzzleFlash.efkproj`（Claude が手で書いた設定の XML）、`Texture/MuzzleFlash.png`・`Spark.png`（自作）。2026-11-05 に Claude が作成（自作なのでライセンスの問題なし）
