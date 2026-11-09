@@ -18,6 +18,7 @@ UI::UI()
 	magazineText.SetPosition(Vector3(-728.0f, 336.0f, 0.0f));
 	ammoText.SetPosition(Vector3(-677.0f, 324.0f, 0.0f));
 	ammoText.SetScale(0.6f);
+	medkitText.SetPosition(Vector3(-482.0f, 336.0f, 0.0f));
 }
 UI::~UI()
 {
@@ -49,6 +50,8 @@ void UI::Update()
 	magazineText.SetText(text);
 	swprintf_s(text, L"/%d", pistol->ammo);
 	ammoText.SetText(text);
+	swprintf_s(text, L"%d", player->medkit);
+	medkitText.SetText(text);
 }
 void UI::Render(RenderContext& rc)
 {
@@ -60,4 +63,5 @@ void UI::Render(RenderContext& rc)
 	medkitPanel.Draw(rc);
 	magazineText.Draw(rc);
 	ammoText.Draw(rc);
+	medkitText.Draw(rc);
 }

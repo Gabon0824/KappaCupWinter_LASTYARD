@@ -19,7 +19,8 @@ Game::Game()
 	pistol = NewGO<Pistol>(0, "pistol");
 	reticle = NewGO<Reticle>(0, "reticle");
 	ui = NewGO<UI>(0, "ui");
-	NewGO<Enemy>(0, "enemy");
+	enemy = NewGO<Enemy>(0, "enemy");
+	
 }
 
 Game::~Game()
@@ -34,7 +35,7 @@ Game::~Game()
 
 bool Game::Start()
 {
-	
+	g_sceneLight->GetSceneLight().directionalLight[0].castShadow = false;
 	return true;
 }
 

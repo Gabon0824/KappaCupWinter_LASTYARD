@@ -25,6 +25,7 @@ public:
 	Pistol* pistol;
 	Reticle* reticle;
 	UI* ui;
+	Enemy* enemy;
 
 private:
 	

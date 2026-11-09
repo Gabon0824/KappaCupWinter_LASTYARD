@@ -28,6 +28,8 @@ public:
  float defaultSpeed = 1.0f;
  const int MAX_HP = 100;
  int hp = MAX_HP;
+ int medkit = 2;
+ const int healhealth = 50;
 
 };
 

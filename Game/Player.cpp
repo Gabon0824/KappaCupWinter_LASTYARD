@@ -30,17 +30,26 @@ void Player::Update()
 	Animation();
 	modelRender.Update();
 
+	if (g_pad[0]->IsTrigger(enButtonRB1) && medkit >= 1 && hp < MAX_HP && hp > 0)
+	{
+		hp += healhealth;
+		if (hp > MAX_HP)
+		{
+			hp = MAX_HP;
+		}
+		medkit -= 1;
+	}
+
 
 	//HPバーが減るボタン（実装時には消しておくこと！)
-	if (g_pad[0]->IsTrigger(enButtonY))
+	/*if (g_pad[0]->IsTrigger(enButtonY))
 	{
 		hp -= 10;
 		if (hp < 0)
 		{
 			hp = 0;
 		}
-	}
-	Move();
+	}*/
 
 }
 
