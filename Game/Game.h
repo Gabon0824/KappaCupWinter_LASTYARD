@@ -26,6 +26,7 @@ public:
 	Reticle* reticle;
 	UI* ui;
 	Enemy* enemy;
+	bool gameClear = false;
 
 private:
 	

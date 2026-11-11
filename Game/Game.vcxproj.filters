@@ -4,6 +4,9 @@
     <Filter Include="system">
       <UniqueIdentifier>{22dd8095-74f9-46df-81a1-36675a040b1f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Weapon">
+      <UniqueIdentifier>{5814db56-cb7a-46bb-8369-49a7503cc7e5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -15,12 +18,17 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="GameCamera.cpp" />
-    <ClCompile Include="Pistol.cpp" />
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Title.cpp" />
+    <ClCompile Include="Pistol.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="GameClear.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -31,11 +39,16 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="GameCamera.h" />
-    <ClInclude Include="Pistol.h" />
-    <ClInclude Include="Bullet.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Title.h" />
+    <ClInclude Include="Pistol.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>Weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="GameClear.h" />
   </ItemGroup>
 </Project>

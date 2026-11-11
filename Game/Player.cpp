@@ -15,7 +15,7 @@ Player::Player()
 	animationClips[enAnimationClip_Walk].SetLoopFlag(true);
 
 	modelRender.Init("Assets/Chara_wepon/Human.tkm", animationClips, enAnimationClip_Num);
-	characterController.Init(25.0f, 75.0f, position);
+	characterController.Init(15.0f, 42.0f, position);
 }
 
 Player::~Player()

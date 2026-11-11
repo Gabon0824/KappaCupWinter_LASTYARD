@@ -33,7 +33,7 @@ void Title::Update()
 
 	pos.y = 1000.0f;
 
-	pos.z = target.z + cos(radian) * 1800.0f;
+	pos.z = target.z + cos(radian) * 1500.0f;
 
 	g_camera3D->SetTarget(target);
 	g_camera3D->SetPosition(pos);

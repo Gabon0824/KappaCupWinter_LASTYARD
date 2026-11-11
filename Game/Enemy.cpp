@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "Game.h"
 
 Enemy::Enemy()
 {
@@ -11,7 +12,7 @@ Enemy::Enemy()
 	modelRender.Init("Assets/enemy/Zombie.tkm", animationClips, enAnimationClip_Num);
 	position.z = 300.0f;
 	modelRender.SetPosition(position);
-	characterController.Init(25.0f, 75.0f, position);
+	characterController.Init(15.0f, 42.0f, position);
 }
 
 Enemy::~Enemy()
@@ -29,6 +30,8 @@ void Enemy::Update()
 {
 	if (hp <= 0)
 	{
+		Game* game = FindGO<Game>("game");
+		game->gameClear = true;
 		DeleteGO(this);
 		return;
 	};
@@ -37,7 +40,7 @@ void Enemy::Update()
 	float distance = toPlayer.Length();
 	toPlayer.y = 0.0f;
 	toPlayer.Normalize();
-
+	
 	if (distance > ATTACK_RANGE)
 	{
 		moveSpeed = toPlayer * MOVE_SPEED;

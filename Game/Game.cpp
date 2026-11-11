@@ -7,6 +7,7 @@
 #include "Reticle.h"
 #include "UI.h"
 #include "Enemy.h"
+#include "GameClear.h"
 
 
 
@@ -41,7 +42,12 @@ bool Game::Start()
 
 void Game::Update()
 {
-	// g_renderingEngine->DisableRaytracing();
+	if (gameClear)
+	{
+		NewGO<GameClear>(0, "gameclear");
+		DeleteGO(this);
+	}
+	 g_renderingEngine->DisableRaytracing();
 	
 }
 

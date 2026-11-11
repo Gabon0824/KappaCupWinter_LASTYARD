@@ -34,7 +34,7 @@ void Bullet::Update()
 	if (enemy != nullptr)
 	{
 		Vector3 enemyCenter = enemy->position;
-		enemyCenter.y += 60.0f;
+		enemyCenter.y += 36.0f;
 		Vector3 diff = enemyCenter - pos;
 		if (diff.Length() < HIT_DISTANCE)
 		{

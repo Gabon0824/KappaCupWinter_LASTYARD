@@ -227,6 +227,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameCamera.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Pistol.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameCamera.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="Player.h" />
