@@ -29,7 +29,7 @@ public:
 	int Attack = 20;
 	const float ATTACK_RANGE = 70.0f;
 	float attackTimer = 0.0f;
-	float AttackCool = 0.7f;
+	float AttackCool = 1.0f;
 
 };
 

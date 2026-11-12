@@ -51,7 +51,7 @@ void Enemy::Update()
 	{
 		moveSpeed.x = 0.0f;
 		moveSpeed.z = 0.0f;
-		modelRender.PlayAnimation(enAnimationClip_Attack, 1.5f);
+		modelRender.PlayAnimation(enAnimationClip_Attack, 1.0f);
 		attackTimer += g_gameTime->GetFrameDeltaTime();
 		if (attackTimer >= AttackCool)
 		{
