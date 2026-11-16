@@ -32,10 +32,14 @@ void Bullet::Update()
 		DeleteGO(this);
 		return;
 	}
-	Enemy* enemy = FindGO<Enemy>("enemy");
-	if (enemy != nullptr)
-	{
 
+	const auto& enemies = FindGOs<Enemy>("enemy");
+	for (Enemy* enemy : enemies)
+	{
+		if (enemy->IsDead())
+		{
+			continue;   // もう倒されて消える途中のゾンビは飛ばす
+		}
 		Vector3 enemyCenter = enemy->position;
 		enemyCenter.y += 36.0f;
 		Vector3 diff = enemyCenter - pos;
@@ -61,6 +65,8 @@ void Bullet::Update()
 	}
 
 
+
+
 	Vector3 dir = moveSpeed;
 	dir.Normalize();
 	Quaternion rot;
@@ -72,9 +78,9 @@ void Bullet::Update()
 	Vector3 Size = { 10.0f,10.0f,10.0f };
 	modelRender.SetScale(Size);
 	modelRender.Update();
+}
 
 	
-}
 void Bullet::Render(RenderContext& rc)
 {
 	modelRender.Draw(rc);

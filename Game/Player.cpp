@@ -39,6 +39,11 @@ void Player::Update()
 		}
 		medkit -= 1;
 	}
+	if (hp <= 0)
+	{
+		Game* game = FindGO<Game>("game");
+		game->gameOver = true;
+	}
 
 
 	//HPバーが減るボタン（実装時には消しておくこと！)

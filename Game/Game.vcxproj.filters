@@ -29,6 +29,7 @@
       <Filter>Weapon</Filter>
     </ClCompile>
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameOver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -50,5 +51,6 @@
       <Filter>Weapon</Filter>
     </ClInclude>
     <ClInclude Include="GameClear.h" />
+    <ClInclude Include="GameOver.h" />
   </ItemGroup>
 </Project>

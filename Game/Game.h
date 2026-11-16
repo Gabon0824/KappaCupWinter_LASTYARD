@@ -27,6 +27,9 @@ public:
 	UI* ui;
 	Enemy* enemy;
 	bool gameClear = false;
+	bool gameOver = false;
+	int enemyCount = 0;
+	int defeatCount = 0;
 
 private:
 	

@@ -14,6 +14,7 @@ public:
 	{
 		enAnimationClip_Walk,
 		enAnimationClip_Attack,
+		enAnimationClip_Idle,
 		enAnimationClip_Num,
 	};
 	AnimationClip animationClips[enAnimationClip_Num];
@@ -28,6 +29,7 @@ public:
 	int hp = MAX_HP;
 	int Attack = 20;
 	const float ATTACK_RANGE = 70.0f;
+	const float SEACH_RANGE = 400.0f;
 	float attackTimer = 0.0f;
 	float AttackCool = 1.0f;
 

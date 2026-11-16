@@ -12,5 +12,9 @@ public:
 	SpriteRender clearRender;
 	FontRender fontRender;
 	FontRender pressText;
+	SpriteRender restartRender;
+	SpriteRender menuRender;
+	SpriteRender cursorRender;
+	int Select = 0;
 };
 
