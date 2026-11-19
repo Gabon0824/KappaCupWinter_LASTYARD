@@ -9,6 +9,7 @@ public:
 	bool Start();
 	void Update();
 	void Render(RenderContext& rc);
+	virtual void AttackPlayer(const Vector3& toPlayer);
 	ModelRender modelRender;
 	enum EnAnimationClip
 	{
@@ -24,14 +25,14 @@ public:
 	Vector3 moveSpeed;
 	Quaternion rotation;
 
-	const float MOVE_SPEED = 60.0f;
-	const int MAX_HP = 30;
-	int hp = MAX_HP;
-	int Attack = 20;
-	const float ATTACK_RANGE = 70.0f;
-	const float SEACH_RANGE = 400.0f;
+	float MOVE_SPEED;
+	int MAX_HP;
+	int hp;
+	int Attack;
+	float ATTACK_RANGE;
+	float SEACH_RANGE;
 	float attackTimer = 0.0f;
-	float AttackCool = 1.0f;
+	float AttackCool;
 
 };
 

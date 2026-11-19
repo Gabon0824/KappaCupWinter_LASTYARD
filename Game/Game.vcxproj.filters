@@ -7,6 +7,9 @@
     <Filter Include="Weapon">
       <UniqueIdentifier>{5814db56-cb7a-46bb-8369-49a7503cc7e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Enemy">
+      <UniqueIdentifier>{def6e2fd-aa20-48f0-b6cc-f83f34ee8380}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp" />
@@ -20,7 +23,6 @@
     <ClCompile Include="GameCamera.cpp" />
     <ClCompile Include="Reticle.cpp" />
     <ClCompile Include="UI.cpp" />
-    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="Pistol.cpp">
       <Filter>Weapon</Filter>
@@ -30,6 +32,12 @@
     </ClCompile>
     <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Zombie.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -42,7 +50,6 @@
     <ClInclude Include="GameCamera.h" />
     <ClInclude Include="Reticle.h" />
     <ClInclude Include="UI.h" />
-    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Pistol.h">
       <Filter>Weapon</Filter>
@@ -52,5 +59,11 @@
     </ClInclude>
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameOver.h" />
+    <ClInclude Include="Enemy.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Zombie.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

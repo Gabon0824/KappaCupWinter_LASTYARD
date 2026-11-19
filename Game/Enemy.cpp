@@ -5,13 +5,7 @@
 
 Enemy::Enemy()
 {
-	animationClips[enAnimationClip_Walk].Load("Assets/animData/human_zombie_walk.tka");
-	animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-	animationClips[enAnimationClip_Attack].Load("Assets/animData/human_zombie_attack.tka");
-	animationClips[enAnimationClip_Attack].SetLoopFlag(true);
-	animationClips[enAnimationClip_Idle].Load("Assets/animData/human_zombie_idle.tka");
-	animationClips[enAnimationClip_Idle].SetLoopFlag(true);
-	modelRender.Init("Assets/enemy/Zombie.tkm", animationClips, enAnimationClip_Num);
+	
 }
 
 Enemy::~Enemy()
@@ -61,6 +55,21 @@ void Enemy::Update()
 	}
 	else
 	{
+		AttackPlayer(toPlayer);
+	}
+	
+	
+
+	position = characterController.Execute(moveSpeed, 1.0f / 60.0f);
+	modelRender.SetPosition(position);
+
+	
+
+	modelRender.Update();
+}
+
+void Enemy::AttackPlayer(const Vector3& toPlayer)
+	{
 		moveSpeed.x = 0.0f;
 		moveSpeed.z = 0.0f;
 		modelRender.PlayAnimation(enAnimationClip_Attack, 1.0f);
@@ -76,15 +85,6 @@ void Enemy::Update()
 			}
 			attackTimer = 0.0f;
 		}
-	}
-	
-
-	position = characterController.Execute(moveSpeed, 1.0f / 60.0f);
-	modelRender.SetPosition(position);
-
-	
-
-	modelRender.Update();
 }
 
 void Enemy::Render(RenderContext& rc)

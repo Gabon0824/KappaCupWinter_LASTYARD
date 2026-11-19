@@ -7,6 +7,7 @@
 #include "Reticle.h"
 #include "UI.h"
 #include "Enemy.h"
+#include "Zombie.h"
 #include "GameClear.h"
 #include "GameOver.h"
 
@@ -35,7 +36,7 @@ Game::Game()
 	};
 	for (const Vector3& pos : enemyPositions)
 	{
-		enemy = NewGO<Enemy>(0, "enemy");
+		enemy = NewGO<Zombie>(0, "enemy");
 		enemy->position = pos;
 		enemyCount++;
 	}
