@@ -89,8 +89,8 @@ void Player::Move()
 
 	else if(g_pad[0]->IsPress(enButtonB))
 	{
-		moveSpeed.x *= 3.0f;
-		moveSpeed.z *= 3.0f;
+		moveSpeed.x *= 2.0f;
+		moveSpeed.z *= 2.0f;
 	}
 
 
@@ -99,11 +99,11 @@ void Player::Move()
 	{
 		//重力を直す
 		moveSpeed.y = 0.0f;
-		//Aボタンが押されたら
-		if (g_pad[0]->IsTrigger(enButtonA))
-		{
-			moveSpeed.y = 210.0f;
-		}
+		////Aボタンが押されたら
+		//if (g_pad[0]->IsTrigger(enButtonA))
+		//{
+		//	moveSpeed.y = 210.0f;
+		//}
 	}
 
 	//地面についてなかったら

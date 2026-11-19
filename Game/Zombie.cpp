@@ -21,7 +21,3 @@ Zombie::Zombie()
 	AttackCool = 1.0f;
 }
 
-void Zombie::AttackPlayer(const Vector3& toPlayer)
-{
-
-}
