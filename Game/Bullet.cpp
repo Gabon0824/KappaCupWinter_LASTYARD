@@ -6,9 +6,7 @@ namespace
 {
 	const float  BULLET_LIFE_TIME = 2.0f;
 	const int BULLET_DAMAGE = 10;
-	const float HIT_DISTANCE = 40.0f;
-	const float HEAD_HEIGHT = 64.0f;
-	const float HEAD_DISTANCE = 12.0f;
+	
 
 }
 Bullet::Bullet()
@@ -41,24 +39,12 @@ void Bullet::Update()
 			continue;   // もう倒されて消える途中のゾンビは飛ばす
 		}
 		Vector3 enemyCenter = enemy->position;
-		enemyCenter.y += 36.0f;
+		enemyCenter.y += enemy->HIT_CENTER_HEIGHT;
 		Vector3 diff = enemyCenter - pos;
-		Vector3 HeadPosition = enemy->position;
-		HeadPosition.y += HEAD_HEIGHT;
-		Vector3 HeadDistance = HeadPosition - pos;
-		if (diff.Length() < HIT_DISTANCE)
+		
+		if (diff.Length() < enemy->HIT_RADIUS)
 		{
-			int damage = BULLET_DAMAGE;
-			int random = rand() % 100;
-			if (random < 3)
-			{
-				enemy->hp = 0;
-			}
-			else if (HeadDistance.Length() < HEAD_DISTANCE)
-			{
-				damage *= 1.5;
-			}
-			enemy->hp -= damage;
+			enemy->OnHit(pos, BULLET_DAMAGE);
 			DeleteGO(this);
 			return;
 		}

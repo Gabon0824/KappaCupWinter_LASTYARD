@@ -9,6 +9,7 @@ class Pistol;
 class Reticle;
 class UI;
 class Enemy;
+class Boss;
 
 class Game : public IGameObject
 {
@@ -26,6 +27,7 @@ public:
 	Reticle* reticle;
 	UI* ui;
 	Enemy* enemy;
+	Boss* boss;
 	bool gameClear = false;
 	bool gameOver = false;
 	int enemyCount = 0;

@@ -8,6 +8,7 @@
 #include "UI.h"
 #include "Enemy.h"
 #include "Zombie.h"
+#include "Boss.h"
 #include "GameClear.h"
 #include "GameOver.h"
 
@@ -33,13 +34,19 @@ Game::Game()
 		Vector3(968.0f, 0.0f, 1632.0f),
 		Vector3(560.0f, 0.0f, 2584.0f),
 		Vector3(-872.0f, 0.0f, 2360.0f)
+
 	};
+
+	
 	for (const Vector3& pos : enemyPositions)
 	{
 		enemy = NewGO<Zombie>(0, "enemy");
 		enemy->position = pos;
 		enemyCount++;
 	}
+	boss = NewGO<Boss>(0, "enemy");
+	boss->position = Vector3(0.0f, 0.0f, 300.0f);
+	enemyCount++;
 }
 
 Game::~Game()

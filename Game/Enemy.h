@@ -10,6 +10,7 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 	virtual void AttackPlayer(const Vector3& toPlayer);
+	virtual void OnHit(const Vector3& hitpos, int damage);
 	ModelRender modelRender;
 	enum EnAnimationClip
 	{
@@ -33,6 +34,10 @@ public:
 	float SEACH_RANGE;
 	float attackTimer = 0.0f;
 	float AttackCool;
+	float CAPSULE_RADIUS;
+	float CAPSULE_HEIGHT;
+	float HIT_CENTER_HEIGHT;
+	float HIT_RADIUS;
 
 };
 

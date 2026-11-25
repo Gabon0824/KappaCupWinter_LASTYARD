@@ -3,6 +3,12 @@
 #include "Player.h"
 #include "Game.h"
 
+
+namespace
+{
+	const float HEAD_HEIGHT = 64.0f;
+	const float HEAD_DISTANCE = 12.0f;
+}
 Enemy::Enemy()
 {
 	
@@ -17,7 +23,7 @@ bool Enemy::Start()
 {
 	player = FindGO<Player>("player");
 	modelRender.SetPosition(position);
-	characterController.Init(15.0f, 42.0f, position);
+	characterController.Init(CAPSULE_RADIUS, CAPSULE_HEIGHT, position);
 	return true;
 }
 
@@ -87,6 +93,27 @@ void Enemy::AttackPlayer(const Vector3& toPlayer)
 		}
 }
 
+void Enemy::OnHit(const Vector3& hitPos, int damage)
+{
+	//ヘッド判定
+	Vector3 HeadPosition = position;
+	HeadPosition.y += HEAD_HEIGHT;
+	Vector3 HeadDistance = HeadPosition - hitPos;
+	{
+		//３パーで一撃
+		int random = rand() % 100;
+		if (random < 3)
+		{
+			hp = 0;
+		}
+		//頭で1.5倍
+		else if (HeadDistance.Length() < HEAD_DISTANCE)
+		{
+			damage *= 1.5;
+		}
+		hp -= damage;
+	}
+}
 void Enemy::Render(RenderContext& rc)
 {
 	modelRender.Draw(rc);

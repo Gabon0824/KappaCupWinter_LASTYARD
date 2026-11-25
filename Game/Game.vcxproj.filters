@@ -38,6 +38,9 @@
     <ClCompile Include="Zombie.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h" />
@@ -63,6 +66,9 @@
       <Filter>Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Zombie.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
       <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>

@@ -19,5 +19,9 @@ Zombie::Zombie()
 	SEACH_RANGE = 400.0f;
 	attackTimer = 0.0f;
 	AttackCool = 1.0f;
+	CAPSULE_RADIUS = 15.0f;
+	CAPSULE_HEIGHT = 42.0f;
+	HIT_CENTER_HEIGHT = 36.0f;
+	HIT_RADIUS = 40.0f;
 }
 
