@@ -31,12 +31,7 @@ void Enemy::Update()
 {
 	if (hp <= 0)
 	{
-		Game* game = FindGO<Game>("game");
-		game->defeatCount++;
-		if (game->defeatCount >= game->enemyCount)
-		{
-			game->gameClear = true;
-		}
+		OnDead();
 		DeleteGO(this);
 		return;
 	};
@@ -93,7 +88,7 @@ void Enemy::AttackPlayer(const Vector3& toPlayer)
 		}
 }
 
-void Enemy::OnHit(const Vector3& hitPos, int damage)
+void Enemy::OnHit(const Vector3& hitPos,const Vector3& dir, int damage)
 {
 	//ヘッド判定
 	Vector3 HeadPosition = position;
@@ -117,4 +112,10 @@ void Enemy::OnHit(const Vector3& hitPos, int damage)
 void Enemy::Render(RenderContext& rc)
 {
 	modelRender.Draw(rc);
+}
+
+void Enemy::OnDead()
+{
+	Game* game = FindGO<Game>("game");
+	game->defeatCount++;
 }

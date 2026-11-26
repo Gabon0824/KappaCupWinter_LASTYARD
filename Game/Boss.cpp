@@ -1,10 +1,12 @@
 #include "stdafx.h"
 #include "Boss.h"
+#include "Game.h"
 
 
 namespace
 {
 	const float PLATE_BODY_RATE = 0.3f;
+	const float HEART_RADIUS = 15.0f;
 }
 Boss::Boss()
 {
@@ -22,7 +24,7 @@ Boss::Boss()
 
 
 	MOVE_SPEED = 150.0f;
-	MAX_HP = 300.0f;
+	MAX_HP = 100.0f;
 	hp = MAX_HP;
 	Attack = 50;
 	ATTACK_RANGE = 100.0f;
@@ -50,6 +52,11 @@ void Boss::Update()
 	plateRender.SetPosition(pos);
 	plateRender.SetRotation(rot);
 	plateRender.Update();
+
+	Vector3 offset = { 1.47f,-6.97f,-4.0f };
+	offset *= 2.5f;
+	rot.Apply(offset);
+	heartPos = pos + offset;
 }
 
 void Boss::Render(RenderContext& rc)
@@ -61,7 +68,7 @@ void Boss::Render(RenderContext& rc)
 	}
 }
 
-void Boss::OnHit(const Vector3& hitPos, int damage)
+void Boss::OnHit(const Vector3& hitPos,const Vector3& dir, int damage)
 {
 	if (isPlate)
 	{
@@ -74,6 +81,21 @@ void Boss::OnHit(const Vector3& hitPos, int damage)
 	}
 	else
 	{
+		Vector3 toHeart = heartPos - hitPos;
+		float t = toHeart.Dot(dir);
+		Vector3 nearest = hitPos + dir * t;
+		Vector3 diff = heartPos - nearest;
+		if (diff.Length() < HEART_RADIUS)
+		{
+			damage *= 1.5f;
+		}
 		hp -= damage;
 	}
+}
+
+void Boss::OnDead()
+{
+	Enemy::OnDead();
+	Game* game = FindGO<Game>("game");
+	game->gameClear = true;
 }

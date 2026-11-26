@@ -10,7 +10,8 @@ public:
 	void Update();
 	void Render(RenderContext& rc);
 	virtual void AttackPlayer(const Vector3& toPlayer);
-	virtual void OnHit(const Vector3& hitpos, int damage);
+	virtual void OnHit(const Vector3& hitpos, const Vector3& dir, int damage);
+	virtual void OnDead();
 	ModelRender modelRender;
 	enum EnAnimationClip
 	{

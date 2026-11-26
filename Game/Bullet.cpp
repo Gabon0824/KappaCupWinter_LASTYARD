@@ -31,6 +31,8 @@ void Bullet::Update()
 		return;
 	}
 
+	Vector3 bulletDir = moveSpeed;
+	bulletDir.Normalize();
 	const auto& enemies = FindGOs<Enemy>("enemy");
 	for (Enemy* enemy : enemies)
 	{
@@ -44,7 +46,7 @@ void Bullet::Update()
 		
 		if (diff.Length() < enemy->HIT_RADIUS)
 		{
-			enemy->OnHit(pos, BULLET_DAMAGE);
+			enemy->OnHit(pos, bulletDir,BULLET_DAMAGE);
 			DeleteGO(this);
 			return;
 		}
