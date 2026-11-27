@@ -33,13 +33,16 @@ void GameCamera::Update()
 		distance = 40.0f;
 		viewangle = 45.0f;
 	}
+	nowshift = Math::Lerp(0.1,nowshift, shiftAmount);
+	nowDistance = Math::Lerp(0.1,nowDistance, distance);
+	nowViewAngle = Math::Lerp(0.1,nowViewAngle, viewangle);
 	Vector3 target = m_player->position;
 	target.y += 62.0f;
 
 	Vector3 right = g_camera3D->GetRight();
 	right.y = 0.0f;
 	right.Normalize();
-	target += right * shiftAmount;
+	target += right * nowshift;
 
 	Vector3 toCameraPosOld = toCameraPos;
 
@@ -73,9 +76,9 @@ void GameCamera::Update()
 
 	Vector3 dir = toCameraPos;
 	dir.Normalize();
-	Vector3 pos = target + dir * distance;
+	Vector3 pos = target + dir * nowDistance;
 
-	g_camera3D->SetViewAngle(Math::DegToRad(viewangle));
+	g_camera3D->SetViewAngle(Math::DegToRad(nowViewAngle));
 	g_camera3D->SetTarget(target);
 	g_camera3D->SetPosition(pos);
 

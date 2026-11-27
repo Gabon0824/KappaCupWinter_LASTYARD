@@ -25,12 +25,17 @@ Player::~Player()
 
 void Player::Update()
 {
-	Move();
-	Rotation();
+	// つかまれている間は、動けない・向きも変えない
+	if (isGrabbed == false)
+	{
+		Move();
+		Rotation();
+	}
 	Animation();
 	modelRender.Update();
 
-	if (g_pad[0]->IsTrigger(enButtonRB1) && medkit >= 1 && hp < MAX_HP && hp > 0)
+	// 救急キット（つかまれている間は使えない）
+	if (g_pad[0]->IsTrigger(enButtonRB1) && medkit >= 1 && hp < MAX_HP && hp > 0 && isGrabbed == false)
 	{
 		hp += healhealth;
 		if (hp > MAX_HP)

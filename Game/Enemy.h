@@ -12,12 +12,14 @@ public:
 	virtual void AttackPlayer(const Vector3& toPlayer);
 	virtual void OnHit(const Vector3& hitpos, const Vector3& dir, int damage);
 	virtual void OnDead();
+	virtual bool Impact() { return false; }
 	ModelRender modelRender;
 	enum EnAnimationClip
 	{
 		enAnimationClip_Walk,
 		enAnimationClip_Attack,
 		enAnimationClip_Idle,
+		enAnimationClip_Shockwave,
 		enAnimationClip_Num,
 	};
 	AnimationClip animationClips[enAnimationClip_Num];

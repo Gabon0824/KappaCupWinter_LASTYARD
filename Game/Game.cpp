@@ -45,7 +45,7 @@ Game::Game()
 		enemyCount++;
 	}
 	boss = NewGO<Boss>(0, "enemy");
-	boss->position = Vector3(0.0f, 0.0f, 300.0f);
+	boss->position = Vector3(0.0f, 0.0f, 2800.0f);
 	enemyCount++;
 }
 

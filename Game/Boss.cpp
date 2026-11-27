@@ -1,21 +1,30 @@
 #include "stdafx.h"
 #include "Boss.h"
 #include "Game.h"
+#include "Player.h"
 
 
 namespace
 {
 	const float PLATE_BODY_RATE = 0.3f;
 	const float HEART_RADIUS = 15.0f;
+	const float CHARGE_TIME = 3.0f;
+	const float SHOCK_NEAR = 80.0f;
+	const float SHOCK_FAR = 250.0f;
+	const int SHOCK_NEAR_DAMAGE = 40;
+	const int SHOCK_FAR_DAMAGE = 20;
+
 }
 Boss::Boss()
 {
-	animationClips[enAnimationClip_Walk].Load("Assets/animData/human_zombie_walk.tka");
+	animationClips[enAnimationClip_Walk].Load("Assets/animData/boss_walk.tka");
 	animationClips[enAnimationClip_Walk].SetLoopFlag(true);
-	animationClips[enAnimationClip_Attack].Load("Assets/animData/human_zombie_attack.tka");
+	animationClips[enAnimationClip_Attack].Load("Assets/animData/boss_ground_slam.tka");
 	animationClips[enAnimationClip_Attack].SetLoopFlag(true);
-	animationClips[enAnimationClip_Idle].Load("Assets/animData/human_zombie_idle.tka");
+	animationClips[enAnimationClip_Idle].Load("Assets/animData/boss_idle.tka");
 	animationClips[enAnimationClip_Idle].SetLoopFlag(true);
+	animationClips[enAnimationClip_Shockwave].Load("Assets/animData/boss_shockwave.tka");
+	animationClips[enAnimationClip_Shockwave].SetLoopFlag(true);
 	modelRender.Init("Assets/boss/Boss.tkm", animationClips, enAnimationClip_Num);
 	modelRender.SetScale(2.5f, 2.5f, 2.5f);
 	plateRender.Init("Assets/boss/Boss_Plate.tkm",nullptr,0,enModelUpAxisY);
@@ -28,7 +37,7 @@ Boss::Boss()
 	hp = MAX_HP;
 	Attack = 50;
 	ATTACK_RANGE = 100.0f;
-	SEACH_RANGE = 1000.0f;
+	SEACH_RANGE = 800.0f;
 	attackTimer = 0.0f;
 	AttackCool = 1.0f;
 
@@ -98,4 +107,58 @@ void Boss::OnDead()
 	Enemy::OnDead();
 	Game* game = FindGO<Game>("game");
 	game->gameClear = true;
+}
+
+void Boss::AttackPlayer(const Vector3& toPlayer)
+{
+	// その場で止まる
+	moveSpeed.x = 0.0f;
+	moveSpeed.z = 0.0f;
+	// 攻撃のアニメを流して、プレイヤーの方を向く
+	rotation.SetRotationYFromDirectionXZ(toPlayer);
+	modelRender.SetRotation(rotation);
+	if (attackTimer == 0.0f)
+	{
+		attackType = rand() % 2;
+		if (attackType == 1)
+		{
+			isShockwave = true;
+		}
+	}
+	if (attackType == 0)
+	{
+		modelRender.PlayAnimation(enAnimationClip_Attack, 1.0f);
+	}
+	else
+	{
+		modelRender.PlayAnimation(enAnimationClip_Shockwave, 1.0f);
+	}
+	// ためている時間を数える
+	attackTimer += g_gameTime->GetFrameDeltaTime();
+	// ため終わったら殴る（途中で範囲の外へ逃げると、Enemy::Update でタイマーが 0 に戻る）
+	if (attackTimer >= CHARGE_TIME)
+	{
+		if (attackType == 0)
+		{
+			player->hp -= Attack;
+		}
+		else
+		{
+			float dist = (player->position - position).Length();
+			if (dist < SHOCK_NEAR)
+			{
+				player->hp -= SHOCK_NEAR_DAMAGE;
+			}
+			else if (dist < SHOCK_FAR)
+			{
+				player->hp -= SHOCK_FAR_DAMAGE;
+			}
+			isShockwave = false;
+		}
+		if (player->hp < 0)
+		{
+			player->hp = 0;
+		}
+		attackTimer = 0.0f;
+	}
 }

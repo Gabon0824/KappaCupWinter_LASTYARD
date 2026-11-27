@@ -40,7 +40,11 @@ void Enemy::Update()
 	float distance = toPlayer.Length();
 	toPlayer.y = 0.0f;
 	toPlayer.Normalize();
-	if (distance > SEACH_RANGE)
+	if (Impact())
+	{
+		AttackPlayer(toPlayer);
+	}
+	else if (distance > SEACH_RANGE)
 	{
 		moveSpeed.x = 0.0f;
 		moveSpeed.z = 0.0f;

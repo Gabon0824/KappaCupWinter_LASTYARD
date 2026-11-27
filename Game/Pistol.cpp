@@ -72,7 +72,7 @@ void Pistol:: Update()
 		}
 	}
 
-	if (coolTime <= 0.0f && g_pad[0]->IsPress(enButtonLB2) && g_pad[0]->IsTrigger(enButtonRB2) && nowMagazine > 0 && nowreload == false)
+	if (coolTime <= 0.0f && g_pad[0]->IsPress(enButtonLB2) && g_pad[0]->IsTrigger(enButtonRB2) && nowMagazine > 0 && nowreload == false && player->isGrabbed == false)
 	{
 		Vector3 muzzlePos = MUZZELE_OFFSET;
 		rot.Apply(muzzlePos);

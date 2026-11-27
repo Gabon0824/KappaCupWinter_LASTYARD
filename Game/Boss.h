@@ -13,5 +13,9 @@ public:
 	bool isPlate = true;
 	Vector3 heartPos;
 	void OnDead() override;
+	void AttackPlayer(const Vector3& toPlayer) override;
+	bool isShockwave = false;
+	bool Impact() override { return isShockwave; }
+	int attackType = 0;
 
 };
